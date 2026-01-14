@@ -1,0 +1,244 @@
+/* App.css - Global application styles */
+
+/* Ensure long text in content boxes wraps instead of overflowing */
+.content-box,
+.main-content,
+.post-content,
+.article-content,
+.text-container,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Ensure long text in content boxes wraps instead of overflowing */
+.content-box,
+.main-content,
+.post-content,
+.article-content,
+.text-container,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.App {
+  /* Ensure long text in content boxes wraps instead of overflowing */
+  .content-box,
+  .main-content,
+  .post-content,
+  .article-content,
+  .text-container,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  min-height: 100vh;
+
+  /* Ensure long text in content boxes wraps instead of overflowing */
+  .content-box,
+  .main-content,
+  .post-content,
+  .article-content,
+  .text-container,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  background: var(--bg-page);
+
+  /* Ensure long text in content boxes wraps instead of overflowing */
+  .content-box,
+  .main-content,
+  .post-content,
+  .article-content,
+  .text-container,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Ensure long text in content boxes wraps instead of overflowing */
+.content-box,
+.main-content,
+.post-content,
+.article-content,
+.text-container,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Ensure long text in content boxes wraps instead of overflowing */
+.content-box,
+.main-content,
+.post-content,
+.article-content,
+.text-container,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+/* Hide Emergent badge */
+
+/* Ensure long text in content boxes wraps instead of overflowing */
+.content-box,
+.main-content,
+.post-content,
+.article-content,
+.text-container,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+#emergent-badge,
+
+/* Ensure long text in content boxes wraps instead of overflowing */
+.content-box, .main-content, .post-content, .article-content, .text-container, h1, h2, h3, h4, h5, h6, p {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+[id*="emergent"],
+
+/* Ensure long text in content boxes wraps instead of overflowing */
+.content-box, .main-content, .post-content, .article-content, .text-container, h1, h2, h3, h4, h5, h6, p {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+[class*="emergent-badge"] {
+  /* Ensure long text in content boxes wraps instead of overflowing */
+  .content-box,
+  .main-content,
+  .post-content,
+  .article-content,
+  .text-container,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  display: none !important;
+
+  /* Ensure long text in content boxes wraps instead of overflowing */
+  .content-box,
+  .main-content,
+  .post-content,
+  .article-content,
+  .text-container,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  visibility: hidden !important;
+
+  /* Ensure long text in content boxes wraps instead of overflowing */
+  .content-box,
+  .main-content,
+  .post-content,
+  .article-content,
+  .text-container,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  opacity: 0 !important;
+
+  /* Ensure long text in content boxes wraps instead of overflowing */
+  .content-box,
+  .main-content,
+  .post-content,
+  .article-content,
+  .text-container,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Ensure long text in content boxes wraps instead of overflowing */
+.content-box,
+.main-content,
+.post-content,
+.article-content,
+.text-container,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
