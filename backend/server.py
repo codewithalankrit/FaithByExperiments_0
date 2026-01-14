@@ -10,9 +10,9 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+uri = os.getenv("MONGODB_URI") + "&tls=true"
+client = AsyncIOMotorClient(uri)
+db = client[os.getenv("DB_NAME", "faith_db")]
 
 # Create the main app
 app = FastAPI(title="Faith by Experiments API")
