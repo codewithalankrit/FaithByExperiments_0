@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { authAPI, paymentsAPI } from '../services/api';
 import '../styles/AuthPages.css';
 
@@ -8,6 +8,7 @@ export const SubscribePage = ({ onLogin }) => {
   const [searchParams] = useSearchParams();
   const [isLogin, setIsLogin] = useState(searchParams.get('mode') === 'login');
   const [selectedPlan, setSelectedPlan] = useState('yearly');
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -260,18 +261,28 @@ export const SubscribePage = ({ onLogin }) => {
                 
                 <div className="form-group">
                   <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    minLength="6"
-                    className="form-input"
-                    placeholder="Create a secure password"
-                    data-testid="signup-password-input"
-                  />
+                  <div className="password-input-wrapper">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      minLength="6"
+                      className="form-input"
+                      placeholder="Create a secure password"
+                      data-testid="signup-password-input"
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
                 </div>
                 
                 <div className="form-group">
@@ -339,17 +350,27 @@ export const SubscribePage = ({ onLogin }) => {
               
               <div className="form-group">
                 <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="form-input"
-                  placeholder="Enter your password"
-                  data-testid="login-password-input"
-                />
+                <div className="password-input-wrapper">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    className="form-input"
+                    placeholder="Enter your password"
+                    data-testid="login-password-input"
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
                 <Link to="/forgot-password" className="forgot-password-link" data-testid="forgot-password-link">
                   Forgot password?
                 </Link>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 import '../styles/AuthPages.css';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -11,6 +12,8 @@ export const ResetPasswordPage = () => {
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [validating, setValidating] = useState(true);
   const [tokenValid, setTokenValid] = useState(false);
@@ -150,32 +153,52 @@ export const ResetPasswordPage = () => {
               <form onSubmit={handleSubmit} className="auth-form" data-testid="reset-password-form">
                 <div className="form-group">
                   <label htmlFor="password">New Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength="6"
-                    className="form-input"
-                    placeholder="Enter new password"
-                    data-testid="new-password-input"
-                  />
+                  <div className="password-input-wrapper">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength="6"
+                      className="form-input"
+                      placeholder="Enter new password"
+                      data-testid="new-password-input"
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="confirmPassword">Confirm Password</label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    minLength="6"
-                    className="form-input"
-                    placeholder="Confirm new password"
-                    data-testid="confirm-password-input"
-                  />
+                  <div className="password-input-wrapper">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      id="confirmPassword"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      minLength="6"
+                      className="form-input"
+                      placeholder="Confirm new password"
+                      data-testid="confirm-password-input"
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle-btn"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                    >
+                      {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
                 </div>
 
                 <button 
