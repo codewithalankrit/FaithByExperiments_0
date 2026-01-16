@@ -92,7 +92,7 @@ async def seed_database():
     from utils.auth import hash_password
     import uuid
     
-    # Check if already seeded
+    # Check if admin user exists
     admin_exists = await db.users.find_one({"email": "admin@faithbyexperiments.com"})
     
     if not admin_exists:
@@ -109,6 +109,22 @@ async def seed_database():
             "updated_at": datetime.now(timezone.utc).isoformat()
         }
         await db.users.insert_one(admin_user)
+        logger.info("Admin user created")
+    else:
+        # Update admin user to ensure correct password and admin status
+        await db.users.update_one(
+            {"email": "admin@faithbyexperiments.com"},
+            {
+                "$set": {
+                    "password_hash": hash_password("admin123"),
+                    "is_admin": True,
+                    "is_subscribed": True,
+                    "subscription_type": "yearly",
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        )
+        logger.info("Admin user updated/reset")
     
     # Check if posts exist
     posts_exist = await db.posts.find_one({})

@@ -53,6 +53,7 @@ const apiRequest = async (endpoint, options = {}) => {
     
     const response = await fetch(url, {
       ...config,
+      credentials: "include", // Required for cookies/session
       signal: controller.signal
     });
     
