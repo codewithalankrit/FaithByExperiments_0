@@ -161,6 +161,18 @@ async def get_me(current_user: UserResponse = Depends(require_auth)):
     return current_user
 
 
+@router.get("/check-user/{email}")
+async def check_user_by_email(email: str, admin_user: UserResponse = Depends(require_admin)):
+    """Check user details by email (admin only)."""
+    db = get_db()
+    user_doc = await db.users.find_one({"email": email}, {"_id": 0, "password_hash": 0})
+    
+    if not user_doc:
+        raise HTTPException(status_code=404, detail=f"User with email '{email}' not found")
+    
+    return user_doc
+
+
 @router.post("/subscribe")
 async def mock_subscribe(
     current_user: UserResponse = Depends(require_auth)

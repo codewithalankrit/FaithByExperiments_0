@@ -85,6 +85,57 @@ async def health_check():
     return {"status": "healthy"}
 
 
+@api_router.post("/create-test-user")
+async def create_test_user():
+    """Create a test user for testing purposes."""
+    from datetime import datetime, timezone
+    from utils.auth import hash_password
+    import uuid
+    
+    email = "test@gmail.com"
+    
+    # Check if user already exists
+    existing_user = await db.users.find_one({"email": email})
+    if existing_user:
+        return {
+            "message": f"User {email} already exists",
+            "user": {
+                "email": existing_user.get("email"),
+                "name": existing_user.get("name"),
+                "is_subscribed": existing_user.get("is_subscribed", False),
+                "subscription_type": existing_user.get("subscription_type")
+            }
+        }
+    
+    # Create test user
+    user_id = str(uuid.uuid4())
+    test_user = {
+        "id": user_id,
+        "email": email,
+        "name": "Test User",
+        "password_hash": hash_password("test123"),
+        "is_admin": False,
+        "is_subscribed": True,
+        "subscription_type": "monthly",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.users.insert_one(test_user)
+    logger.info(f"Test user created: {email}")
+    
+    return {
+        "message": f"Test user {email} created successfully",
+        "user": {
+            "email": test_user["email"],
+            "name": test_user["name"],
+            "is_subscribed": test_user["is_subscribed"],
+            "subscription_type": test_user["subscription_type"],
+            "password": "test123"  # Only for test user creation
+        }
+    }
+
+
 @api_router.post("/seed")
 async def seed_database():
     """Seed the database with initial data."""
