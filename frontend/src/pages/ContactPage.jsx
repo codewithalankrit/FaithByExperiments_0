@@ -3,6 +3,7 @@ import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { ContactSEO } from '../components/SEO';
 import { getUser } from '../services/api';
+import { siteContent } from '../data/content';
 import '../styles/ContactPage.css';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -69,6 +70,19 @@ export const ContactPage = () => {
           <div className="contact-intro">
             <p>Faith by Experiments offers select in-person meetings for serious inquirers interested in deep discussion and collaborative experimentation.</p>
             <p>These are paid sessions for the people who wish to engage beyond written content.</p>
+            <p>
+              Prefer direct contact? Email us at{' '}
+              <a href={`mailto:${siteContent.contact.email}`}>{siteContent.contact.email}</a>
+              {' '}or WhatsApp{' '}
+              <a
+                href={`https://wa.me/${siteContent.contact.whatsappE164.replace('+', '')}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {siteContent.contact.whatsappDisplay}
+              </a>
+              .
+            </p>
           </div>
           
           {submitted ? (

@@ -12,7 +12,7 @@ router = APIRouter(prefix="/password-reset", tags=["Password Reset"])
 # Resend API setup
 resend.api_key = os.environ.get("RESEND_API_KEY", "")
 SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
-FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "https://faithbyexperiments.com")
 
 # Database will be injected from server.py
 _db = None

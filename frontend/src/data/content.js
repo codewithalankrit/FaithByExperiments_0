@@ -3,6 +3,12 @@ export const siteContent = {
   siteName: "Faith by Experiments",
   tagline: "Faith, tested in real life.",
 
+  contact: {
+    email: "ajitkumar.faithbyexperiments@gmail.com",
+    whatsappDisplay: "+91 72909 86763",
+    whatsappE164: "+917290986763",
+  },
+
   hero: {
     headline: "Faith that fears testing is not faith.",
     supportingText: [

@@ -1,10 +1,16 @@
 // API service for Faith by Experiments
-const API_URL = process.env.REACT_APP_BACKEND_URL;
+let API_URL = process.env.REACT_APP_BACKEND_URL;
+
+// If the site is served over HTTPS, ensure we never call an HTTP backend (mixed content).
+// This helps avoid production issues if REACT_APP_BACKEND_URL was mistakenly set to http://...
+if (typeof window !== 'undefined' && window.location?.protocol === 'https:' && API_URL?.startsWith('http://')) {
+  API_URL = API_URL.replace(/^http:\/\//, 'https://');
+}
 
 // Validate API URL is configured
 console.log('API_URL loaded:', API_URL);
 if (!API_URL) {
-  console.error('REACT_APP_BACKEND_URL is not set. Please create a .env file with REACT_APP_BACKEND_URL=http://localhost:8000');
+  console.error('REACT_APP_BACKEND_URL is not set. Please create a .env file with REACT_APP_BACKEND_URL=https://your-backend-domain.com (or http://localhost:8000 for local dev)');
   console.error('Current env:', process.env);
 }
 

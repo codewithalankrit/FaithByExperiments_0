@@ -40,6 +40,16 @@
   text-align: center;
 }
 
+.contact-intro a {
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.contact-intro a:hover {
+  color: var(--brand-primary);
+}
+
 .contact-form {
   background: var(--bg-card);
   border: 1px solid var(--border-medium);
