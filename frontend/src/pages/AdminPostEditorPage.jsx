@@ -4,7 +4,6 @@ import { ArrowLeft, Save } from 'lucide-react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { postsAPI, getUser, uploadImage } from '../services/api';
-import '../styles/AdminPages.css';
 
 export const AdminPostEditorPage = ({ user }) => {
   const { postId } = useParams();
@@ -180,126 +179,149 @@ export const AdminPostEditorPage = ({ user }) => {
 
   if (loading) {
     return (
-      <div className="admin-editor-page">
-        <header className="admin-header">
-          <div className="admin-header-content">
-            <Link to="/" className="admin-logo">
-              <img 
-                src="https://customer-assets.emergentagent.com/job_34e2cbef-ee34-45ac-8348-79293beec714/artifacts/j8mvu38p_Production-edited-Logo-Photoroom.png" 
-                alt="Faith by Experiments" 
-                className="admin-header-logo"
-              />
-            </Link>
+      <div className="min-h-screen bg-off-white relative">
+        <div 
+          className="fixed inset-0 pointer-events-none z-0 opacity-[0.025] mix-blend-multiply"
+          style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)',
+            backgroundSize: '20px 20px'
+          }}
+        />
+        <div className="relative z-10">
+          <div className="max-w-4xl mx-auto px-6 md:px-8 lg:px-12 py-12 md:py-16">
+            <div className="font-sans text-lg text-warm-black/70">Loading post...</div>
           </div>
-        </header>
-        <div className="admin-editor-container">
-          <div className="loading-state">Loading post...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="admin-editor-page" data-testid="admin-post-editor">
-      <header className="admin-header">
-        <div className="admin-header-content">
-          <Link to="/" className="admin-logo">
+    <div className="min-h-screen bg-off-white relative" data-testid="admin-post-editor">
+      <div 
+        className="fixed inset-0 pointer-events-none z-0 opacity-[0.025] mix-blend-multiply"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)',
+          backgroundSize: '20px 20px'
+        }}
+      />
+      <div className="relative z-10">
+        <div className="max-w-4xl mx-auto px-6 md:px-8 lg:px-12 py-12 md:py-16">
+          <Link to="/" className="flex justify-center mb-8">
             <img 
-              src="https://customer-assets.emergentagent.com/job_34e2cbef-ee34-45ac-8348-79293beec714/artifacts/j8mvu38p_Production-edited-Logo-Photoroom.png" 
+              src="/Logo.png" 
               alt="Faith by Experiments" 
-              className="admin-header-logo"
+              className="h-20 md:h-28 lg:h-36"
             />
           </Link>
-        </div>
-      </header>
 
-      <div className="admin-editor-container">
-        <div className="admin-editor-header">
-          <Link to="/admin/dashboard" className="admin-back-button">
-            <ArrowLeft size={20} />
-            <span>Back to Dashboard</span>
-          </Link>
-          <h1 className="admin-editor-title">
-            {isEditMode ? 'Edit Post' : 'Create New Post'}
-          </h1>
-        </div>
-
-        <form onSubmit={handleSubmit} className="admin-editor-form" data-testid="post-editor-form">
-          <div className="admin-form-group">
-            <label htmlFor="title">Post Title *</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              className={`admin-form-input ${errors.title ? 'error' : ''}`}
-              placeholder="Enter post title"
-              data-testid="post-title-input"
-            />
-            {errors.title && <span className="admin-error-text">{errors.title}</span>}
-          </div>
-
-          <div className="admin-form-group">
-            <label htmlFor="excerpt">Excerpt / Short Description *</label>
-            <textarea
-              id="excerpt"
-              name="excerpt"
-              value={formData.excerpt}
-              onChange={handleChange}
-              rows="3"
-              className={`admin-form-textarea ${errors.excerpt ? 'error' : ''}`}
-              placeholder="Brief description that appears in listings"
-              data-testid="post-excerpt-input"
-            />
-            {errors.excerpt && <span className="admin-error-text">{errors.excerpt}</span>}
-          </div>
-
-          <div className="admin-form-group">
-            <label htmlFor="content">Full Content *</label>
-            <div className={`quill-wrapper ${errors.content ? 'error' : ''}`}>
-              <ReactQuill
-                ref={quillRef}
-                theme="snow"
-                value={formData.content}
-                onChange={handleContentChange}
-                modules={modules}
-                formats={formats}
-                placeholder="Write your full post content here..."
-                data-testid="post-content-editor"
-              />
+          <div className="max-w-2xl mx-auto space-y-12 md:space-y-16">
+            <div className="space-y-6">
+              <Link 
+                to="/admin/dashboard" 
+                className="inline-flex items-center gap-2 text-warm-black/60 hover:text-warm-black font-sans text-sm md:text-base transition-colors"
+              >
+                <ArrowLeft size={20} />
+                <span>Back to Dashboard</span>
+              </Link>
+              <h1 className="font-serif font-bold text-4xl md:text-5xl text-warm-black leading-tight">
+                {isEditMode ? 'Edit Post' : 'Create New Post'}
+              </h1>
             </div>
-            {errors.content && <span className="admin-error-text">{errors.content}</span>}
-          </div>
 
-          <div className="admin-form-group checkbox-group">
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                name="is_premium"
-                checked={formData.is_premium}
-                onChange={handleChange}
-                data-testid="post-premium-checkbox"
-              />
-              <span>Premium Content (requires subscription)</span>
-            </label>
-          </div>
+            <form onSubmit={handleSubmit} className="space-y-8" data-testid="post-editor-form">
+              <div className="space-y-2">
+                <label htmlFor="title" className="block font-sans font-medium text-base text-warm-black">Post Title *</label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 border rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage ${
+                    errors.title ? 'border-red-300' : 'border-black/20'
+                  }`}
+                  placeholder="Enter post title"
+                  data-testid="post-title-input"
+                />
+                {errors.title && (
+                  <span className="block font-sans text-sm text-red-600 mt-1">{errors.title}</span>
+                )}
+              </div>
 
-          <div className="admin-editor-actions">
-            <Link to="/admin/dashboard" className="admin-cancel-button">
-              Cancel
-            </Link>
-            <button 
-              type="submit" 
-              className="admin-save-button"
-              disabled={submitting}
-              data-testid="post-submit-btn"
-            >
-              <Save size={20} />
-              <span>{submitting ? 'Saving...' : (isEditMode ? 'Update Post' : 'Publish Post')}</span>
-            </button>
+              <div className="space-y-2">
+                <label htmlFor="excerpt" className="block font-sans font-medium text-base text-warm-black">Excerpt / Short Description *</label>
+                <textarea
+                  id="excerpt"
+                  name="excerpt"
+                  value={formData.excerpt}
+                  onChange={handleChange}
+                  rows="3"
+                  className={`w-full px-4 py-3 border rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage resize-y ${
+                    errors.excerpt ? 'border-red-300' : 'border-black/20'
+                  }`}
+                  placeholder="Brief description that appears in listings"
+                  data-testid="post-excerpt-input"
+                />
+                {errors.excerpt && (
+                  <span className="block font-sans text-sm text-red-600 mt-1">{errors.excerpt}</span>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="content" className="block font-sans font-medium text-base text-warm-black">Full Content *</label>
+                <div className={errors.content ? 'border-2 border-red-300 rounded' : ''}>
+                  <ReactQuill
+                    ref={quillRef}
+                    theme="snow"
+                    value={formData.content}
+                    onChange={handleContentChange}
+                    modules={modules}
+                    formats={formats}
+                    placeholder="Write your full post content here..."
+                    data-testid="post-content-editor"
+                    className="bg-white"
+                  />
+                </div>
+                {errors.content && (
+                  <span className="block font-sans text-sm text-red-600 mt-1">{errors.content}</span>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="is_premium"
+                    checked={formData.is_premium}
+                    onChange={handleChange}
+                    className="w-5 h-5 text-sage border-black/20 rounded focus:ring-sage focus:ring-2"
+                    data-testid="post-premium-checkbox"
+                  />
+                  <span className="font-sans text-base text-warm-black">Premium Content (requires subscription)</span>
+                </label>
+              </div>
+
+              <div className="flex items-center justify-end gap-4 pt-6 border-t border-black/10">
+                <Link 
+                  to="/admin/dashboard" 
+                  className="font-sans font-medium text-base text-warm-black/70 hover:text-warm-black transition-colors"
+                >
+                  Cancel
+                </Link>
+                <button 
+                  type="submit" 
+                  className="inline-flex items-center justify-center gap-2 bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg px-6 py-3 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={submitting}
+                  data-testid="post-submit-btn"
+                >
+                  <Save size={20} />
+                  <span>{submitting ? 'Saving...' : (isEditMode ? 'Update Post' : 'Publish Post')}</span>
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

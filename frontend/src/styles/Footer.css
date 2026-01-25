@@ -21,7 +21,9 @@
 }
 
 .footer-contact-line {
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .footer-contact-highlight {
@@ -82,6 +84,15 @@
     padding: 0 20px;
   }
   
+  .footer-statement {
+    max-width: 100%;
+  }
+  
+  .footer-contact-line {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  
   .footer-nav {
     flex-direction: column;
     gap: 12px;
@@ -89,5 +100,9 @@
   
   .footer-separator {
     display: none;
+  }
+  
+  .footer-copyright p {
+    font-size: 0.8rem;
   }
 }

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { authAPI, paymentsAPI } from '../services/api';
-import '../styles/AuthPages.css';
 
 export const SubscribePage = ({ onLogin }) => {
   const [searchParams] = useSearchParams();
@@ -173,79 +172,196 @@ export const SubscribePage = ({ onLogin }) => {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container-wide">
-        <Link to="/" className="auth-logo-link">
-          <img 
-            src="https://customer-assets.emergentagent.com/job_34e2cbef-ee34-45ac-8348-79293beec714/artifacts/j8mvu38p_Production-edited-Logo-Photoroom.png" 
-            alt="Faith by Experiments" 
-            className="auth-logo-image"
-          />
-        </Link>
-        
-        <Link to="/" className="back-to-home-link">
-          <ArrowLeft size={18} />
-          <span>Back to Home</span>
-        </Link>
-        
-        {error && (
-          <div className="error-message" data-testid="auth-error">
-            {error}
-          </div>
-        )}
-        
-        {!isLogin ? (
-          <div className="subscribe-content">
-            <div className="subscribe-header">
-              <h1 className="subscribe-title">Join The Faith by Experiments Journey</h1>
+    <div className="min-h-screen bg-off-white relative">
+      {/* Subtle noise texture overlay */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-0 opacity-[0.025] mix-blend-multiply"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)',
+          backgroundSize: '20px 20px'
+        }}
+      />
+      
+      <div className="relative z-10 min-h-screen flex flex-col">
+        <div className="max-w-4xl mx-auto w-full px-6 md:px-8 lg:px-12 py-12 md:py-16">
+          <Link to="/" className="flex justify-center mb-8">
+            <img 
+              src="/Logo.png" 
+              alt="Faith by Experiments" 
+              className="h-20 md:h-28 lg:h-36"
+            />
+          </Link>
+          
+          <Link to="/" className="inline-flex items-center gap-2 text-warm-black/60 hover:text-warm-black font-sans text-sm md:text-base mb-8 transition-colors">
+            <ArrowLeft size={18} />
+            <span>Back to Home</span>
+          </Link>
+          
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded mb-8 font-sans text-sm md:text-base" data-testid="auth-error">
+              {error}
             </div>
-            
-            <div className="pricing-selection">
-              <h2 className="selection-title">Select Your Subscription</h2>
-              <div className="plan-options">
-                {plans.map((plan) => (
-                  <div
-                    key={plan.id}
-                    className={`plan-option ${selectedPlan === plan.id ? 'selected' : ''} ${plan.recommended ? 'recommended' : ''}`}
-                    onClick={() => setSelectedPlan(plan.id)}
-                    data-testid={`plan-option-${plan.id}`}
-                  >
-                    <div className="plan-option-content">
-                      <h3 className="plan-option-name">{plan.name}</h3>
-                      <div className="plan-option-price">
-                        <span className="option-price">{plan.price}</span>
-                        <span className="option-period">/ {plan.period}</span>
+          )}
+          
+          {!isLogin ? (
+            <div className="max-w-2xl mx-auto space-y-12 md:space-y-16">
+              <div className="text-center space-y-4">
+                <h1 className="font-serif font-bold text-4xl md:text-5xl text-warm-black leading-tight">
+                  Join The Faith by Experiments Journey
+                </h1>
+              </div>
+              
+              <div className="space-y-8">
+                <h2 className="font-serif font-semibold text-2xl md:text-3xl text-warm-black">Select Your Subscription</h2>
+                <div className="space-y-4">
+                  {plans.map((plan) => (
+                    <div
+                      key={plan.id}
+                      className={`border-2 rounded cursor-pointer transition-all p-6 md:p-8 ${
+                        selectedPlan === plan.id 
+                          ? 'border-sage bg-sage/5' 
+                          : 'border-black/10 hover:border-black/20'
+                      }`}
+                      onClick={() => setSelectedPlan(plan.id)}
+                      data-testid={`plan-option-${plan.id}`}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <h3 className="font-sans font-semibold text-xl md:text-2xl text-warm-black mb-3">{plan.name}</h3>
+                          <div className="flex items-baseline gap-2 mb-2">
+                            <span className="font-sans font-semibold text-3xl md:text-4xl text-warm-black">{plan.price}</span>
+                            <span className="font-sans text-base md:text-lg text-warm-black/50">/ {plan.period}</span>
+                          </div>
+                          <p className="font-sans text-sm md:text-base text-warm-black/60">{plan.note}</p>
+                        </div>
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                          selectedPlan === plan.id 
+                            ? 'border-sage bg-sage' 
+                            : 'border-black/30'
+                        }`}>
+                          {selectedPlan === plan.id && (
+                            <div className="w-3 h-3 rounded-full bg-white"></div>
+                          )}
+                        </div>
                       </div>
-                      <p className="plan-option-note">{plan.note}</p>
                     </div>
-                    <div className="plan-radio">
-                      <div className={`radio-circle ${selectedPlan === plan.id ? 'checked' : ''}`}></div>
+                  ))}
+                </div>
+              </div>
+            
+              
+              <div className="space-y-8">
+                <h2 className="font-serif font-semibold text-2xl md:text-3xl text-warm-black">Your Information</h2>
+                <form onSubmit={handleSubmit} className="space-y-6" data-testid="signup-form">
+                  <div className="space-y-2">
+                    <label htmlFor="name" className="block font-sans font-medium text-base text-warm-black">Full Name</label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                      placeholder="Enter your full name"
+                      data-testid="signup-name-input"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="block font-sans font-medium text-base text-warm-black">Email Address</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                      placeholder="your@email.com"
+                      data-testid="signup-email-input"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="password" className="block font-sans font-medium text-base text-warm-black">Password</label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                        minLength="6"
+                        className="w-full px-4 py-3 pr-12 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                        placeholder="Create a secure password"
+                        data-testid="signup-password-input"
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-warm-black/50 hover:text-warm-black"
+                        onClick={() => setShowPassword(!showPassword)}
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                      >
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
                     </div>
                   </div>
-                ))}
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="mobile" className="block font-sans font-medium text-base text-warm-black">Mobile no. (Optional)</label>
+                    <input
+                      type="tel"
+                      id="mobile"
+                      name="mobile"
+                      value={formData.mobile}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                      placeholder="Enter your mobile number"
+                      data-testid="signup-mobile-input"
+                    />
+                  </div>
+                  
+                  <button 
+                    type="submit" 
+                    className="w-full bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                    disabled={loading}
+                    data-testid="signup-submit-btn"
+                  >
+                    {loading ? 'Processing...' : 'Continue to Secure Payment'}
+                  </button>
+                  
+                  <p className="font-sans text-sm text-warm-black/50 text-center">
+                    Cancel anytime. No ads. No spam.
+                  </p>
+                </form>
+              </div>
+              
+              <div className="text-center pt-8 border-t border-black/10">
+                <p className="font-sans text-base text-warm-black/70">
+                  Already have an account?{' '}
+                  <button 
+                    onClick={() => setIsLogin(true)} 
+                    className="text-sage hover:text-sage/80 font-medium underline"
+                    data-testid="switch-to-login"
+                  >
+                    Sign in
+                  </button>
+                </p>
               </div>
             </div>
-            
-            <div className="subscribe-form-section">
-              <h2 className="form-section-title">Your Information</h2>
-              <form onSubmit={handleSubmit} className="auth-form" data-testid="signup-form">
-                <div className="form-group">
-                  <label htmlFor="name">Full Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="form-input"
-                    placeholder="Enter your full name"
-                    data-testid="signup-name-input"
-                  />
-                </div>
-                
-                <div className="form-group">
-                  <label htmlFor="email">Email Address</label>
+          ) : (
+            <div className="max-w-2xl mx-auto space-y-12 md:space-y-16">
+              <div className="text-center space-y-4">
+                <h1 className="font-serif font-bold text-4xl md:text-5xl text-warm-black leading-tight">Welcome Back</h1>
+                <p className="font-sans text-lg text-warm-black/70">Sign in to access your subscription.</p>
+              </div>
+              
+              <div className="space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-6" data-testid="login-form">
+                <div className="space-y-2">
+                  <label htmlFor="email" className="block font-sans font-medium text-base text-warm-black">Email Address</label>
                   <input
                     type="email"
                     id="email"
@@ -253,15 +369,15 @@ export const SubscribePage = ({ onLogin }) => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="form-input"
+                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
                     placeholder="your@email.com"
-                    data-testid="signup-email-input"
+                    data-testid="login-email-input"
                   />
                 </div>
-                
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <div className="password-input-wrapper">
+              
+                <div className="space-y-2">
+                  <label htmlFor="password" className="block font-sans font-medium text-base text-warm-black">Password</label>
+                  <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
                       id="password"
@@ -269,137 +385,50 @@ export const SubscribePage = ({ onLogin }) => {
                       value={formData.password}
                       onChange={handleChange}
                       required
-                      minLength="6"
-                      className="form-input"
-                      placeholder="Create a secure password"
-                      data-testid="signup-password-input"
+                      className="w-full px-4 py-3 pr-12 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                      placeholder="Enter your password"
+                      data-testid="login-password-input"
                     />
                     <button
                       type="button"
-                      className="password-toggle-btn"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-warm-black/50 hover:text-warm-black"
                       onClick={() => setShowPassword(!showPassword)}
                       aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                   </div>
+                  <Link to="/forgot-password" className="block text-sm text-sage hover:text-sage/80 font-medium mt-2" data-testid="forgot-password-link">
+                    Forgot password?
+                  </Link>
                 </div>
-                
-                <div className="form-group">
-                  <label htmlFor="mobile">Mobile no. (Optional)</label>
-                  <input
-                    type="tel"
-                    id="mobile"
-                    name="mobile"
-                    value={formData.mobile}
-                    onChange={handleChange}
-                    className="form-input"
-                    placeholder="Enter your mobile number"
-                    data-testid="signup-mobile-input"
-                  />
-                </div>
-                
+              
                 <button 
                   type="submit" 
-                  className="submit-button" 
+                  className="w-full bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
                   disabled={loading}
-                  data-testid="signup-submit-btn"
+                  data-testid="login-submit-btn"
                 >
-                  {loading ? 'Processing...' : 'Continue to Secure Payment'}
+                  {loading ? 'Signing in...' : 'Sign In'}
                 </button>
-                
-                <p className="reassurance-text">
-                  Cancel anytime. No ads. No spam.
-                </p>
               </form>
-            </div>
-            
-            <div className="auth-footer">
-              <p>
-                Already have an account?{' '}
-                <button 
-                  onClick={() => setIsLogin(true)} 
-                  className="toggle-link"
-                  data-testid="switch-to-login"
-                >
-                  Sign in
-                </button>
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className="login-content">
-            <h1 className="subscribe-title">Welcome Back</h1>
-            <p className="subscribe-intro">Sign in to access your subscription.</p>
-            
-            <form onSubmit={handleSubmit} className="auth-form" data-testid="login-form">
-              <div className="form-group">
-                <label htmlFor="email">Email Address</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="form-input"
-                  placeholder="your@email.com"
-                  data-testid="login-email-input"
-                />
               </div>
-              
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <div className="password-input-wrapper">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    className="form-input"
-                    placeholder="Enter your password"
-                    data-testid="login-password-input"
-                  />
-                  <button
-                    type="button"
-                    className="password-toggle-btn"
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+            
+              <div className="text-center pt-8 border-t border-black/10">
+                <p className="font-sans text-base text-warm-black/70">
+                  Don't have an account?{' '}
+                  <button 
+                    onClick={() => setIsLogin(false)} 
+                    className="text-sage hover:text-sage/80 font-medium underline"
+                    data-testid="switch-to-signup"
                   >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    Join now
                   </button>
-                </div>
-                <Link to="/forgot-password" className="forgot-password-link" data-testid="forgot-password-link">
-                  Forgot password?
-                </Link>
+                </p>
               </div>
-              
-              <button 
-                type="submit" 
-                className="submit-button" 
-                disabled={loading}
-                data-testid="login-submit-btn"
-              >
-                {loading ? 'Signing in...' : 'Sign In'}
-              </button>
-            </form>
-            
-            <div className="auth-footer">
-              <p>
-                Don't have an account?{' '}
-                <button 
-                  onClick={() => setIsLogin(false)} 
-                  className="toggle-link"
-                  data-testid="switch-to-signup"
-                >
-                  Join now
-                </button>
-              </p>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

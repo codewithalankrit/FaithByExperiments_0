@@ -7,12 +7,17 @@ module.exports = {
   ],
   theme: {
   	extend: {
-  		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  		fontFamily: {
+  			serif: ['Playfair Display', 'Libre Baskerville', 'Georgia', 'serif'],
+  			sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
   		},
   		colors: {
+  			'warm-black': '#1B1B1B',
+  			'off-white': '#FAFAF8',
+  			'sage': '#6b7c3f',
+  			'olive': '#8a9a5a',
+  			'navy': '#2c3e50',
+  			'clay': '#8b7355',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

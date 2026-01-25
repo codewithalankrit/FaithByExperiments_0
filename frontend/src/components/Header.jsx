@@ -91,7 +91,7 @@ export const Header = ({ isLoggedIn, isAdmin, onLogout }) => {
       <div className="header-container">
         <Link to="/" className="logo-link">
           <img 
-            src="https://customer-assets.emergentagent.com/job_34e2cbef-ee34-45ac-8348-79293beec714/artifacts/j8mvu38p_Production-edited-Logo-Photoroom.png" 
+            src="/Logo.png" 
             alt="Faith by Experiments" 
             className="site-logo-image"
           />

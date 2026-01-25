@@ -5,12 +5,13 @@ export const SEO = ({
   title = 'Faith by Experiments',
   description = 'Faith, tested in real life. Structured experiments, frameworks, and observations for those who treat faith as a hypothesis worth testing.',
   keywords = 'faith, experiments, spirituality, personal growth, philosophy, intellectual faith',
-  image = 'https://customer-assets.emergentagent.com/job_34e2cbef-ee34-45ac-8348-79293beec714/artifacts/j8mvu38p_Production-edited-Logo-Photoroom.png',
+  image,
   url,
   type = 'website'
 }) => {
   const siteUrl = process.env.REACT_APP_BACKEND_URL || 'https://faithbyexperiments.com';
   const canonicalUrl = url ? `${siteUrl}${url}` : siteUrl;
+  const imageUrl = image || `${siteUrl}/Logo.png`;
 
   return (
     <Helmet>
@@ -25,7 +26,7 @@ export const SEO = ({
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
+      <meta property="og:image" content={imageUrl} />
       <meta property="og:site_name" content="Faith by Experiments" />
 
       {/* Twitter */}
@@ -33,7 +34,7 @@ export const SEO = ({
       <meta name="twitter:url" content={canonicalUrl} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image" content={imageUrl} />
 
       {/* Additional SEO */}
       <meta name="robots" content="index, follow" />

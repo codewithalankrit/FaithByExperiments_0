@@ -13,20 +13,21 @@ A premium subscription platform for structured experiments, frameworks, and obse
 - **Content Preview**: Locked content previews for non-subscribers
 - **Responsive Design**: Modern, mobile-first UI built with React and Tailwind CSS
 - **MongoDB Atlas Integration**: Cloud-hosted database for scalability
-- **Email & SMS Notifications**: Automated notifications via Resend and Twilio
+- **Email & SMS Notifications**: Automated notifications via email and Twilio
 
 ## 🛠️ Tech Stack
 
 ### Backend
+
 - **Framework**: FastAPI (Python)
 - **Database**: MongoDB Atlas (via Motor async driver)
 - **Authentication**: JWT tokens with bcrypt password hashing
 - **Payment Gateway**: Razorpay
-- **Email Service**: Resend
 - **SMS Service**: Twilio
 - **Server**: Uvicorn
 
 ### Frontend
+
 - **Framework**: React 19
 - **Routing**: React Router DOM
 - **Styling**: Tailwind CSS + Custom CSS
@@ -73,23 +74,25 @@ FaithByExperiments-main/
 - Node.js 18+ and npm/yarn
 - MongoDB Atlas account
 - Razorpay account (for payments)
-- Resend account (for emails)
 - Twilio account (for SMS, optional)
 
 ### Backend Setup
 
 1. **Navigate to backend directory**:
+
    ```bash
    cd backend
    ```
 
 2. **Create virtual environment** (recommended):
+
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 3. **Install dependencies**:
+
    ```bash
    pip install -r requirements.txt
    ```
@@ -97,6 +100,7 @@ FaithByExperiments-main/
 4. **Configure environment variables**:
    - Copy `env.template` to `.env`
    - Fill in your MongoDB Atlas connection string and other credentials:
+
    ```env
    MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/?appName=app
    DB_NAME=faith_by_experiments
@@ -105,14 +109,14 @@ FaithByExperiments-main/
    FRONTEND_URL=http://localhost:3000
    RAZORPAY_KEY_ID=your_razorpay_key_id
    RAZORPAY_KEY_SECRET=your_razorpay_key_secret
-   RESEND_API_KEY=your_resend_api_key
-   SENDER_EMAIL=your@email.com
    ```
 
 5. **Start the server**:
+
    ```bash
    uvicorn server:app --reload
    ```
+
    Server will run on `http://localhost:8000`
 
 6. **Seed the database** (optional):
@@ -123,11 +127,13 @@ FaithByExperiments-main/
 ### Frontend Setup
 
 1. **Navigate to frontend directory**:
+
    ```bash
    cd frontend
    ```
 
 2. **Install dependencies**:
+
    ```bash
    npm install
    # or
@@ -136,6 +142,7 @@ FaithByExperiments-main/
 
 3. **Configure environment variables**:
    - Create `.env` file in the `frontend` directory:
+
    ```env
    REACT_APP_BACKEND_URL=http://localhost:8000
    ```
@@ -152,36 +159,36 @@ FaithByExperiments-main/
 
 ### Backend (.env)
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `MONGODB_URI` | MongoDB Atlas connection string | Yes |
-| `DB_NAME` | Database name | Yes |
-| `CORS_ORIGINS` | Allowed CORS origins (comma-separated) | Yes |
-| `JWT_SECRET` | Secret key for JWT tokens | Yes |
-| `FRONTEND_URL` | Frontend application URL | Yes |
-| `RAZORPAY_KEY_ID` | Razorpay API key ID | For payments |
-| `RAZORPAY_KEY_SECRET` | Razorpay API secret | For payments |
-| `RESEND_API_KEY` | Resend API key | For emails |
-| `SENDER_EMAIL` | Email address for sending emails | For emails |
-| `TWILIO_ACCOUNT_SID` | Twilio account SID | For SMS (optional) |
-| `TWILIO_AUTH_TOKEN` | Twilio auth token | For SMS (optional) |
-| `TWILIO_PHONE_NUMBER` | Twilio phone number | For SMS (optional) |
+| Variable              | Description                            | Required           |
+| --------------------- | -------------------------------------- | ------------------ |
+| `MONGODB_URI`         | MongoDB Atlas connection string        | Yes                |
+| `DB_NAME`             | Database name                          | Yes                |
+| `CORS_ORIGINS`        | Allowed CORS origins (comma-separated) | Yes                |
+| `JWT_SECRET`          | Secret key for JWT tokens              | Yes                |
+| `FRONTEND_URL`        | Frontend application URL               | Yes                |
+| `RAZORPAY_KEY_ID`     | Razorpay API key ID                    | For payments       |
+| `RAZORPAY_KEY_SECRET` | Razorpay API secret                    | For payments       |
+| `TWILIO_ACCOUNT_SID`  | Twilio account SID                     | For SMS (optional) |
+| `TWILIO_AUTH_TOKEN`   | Twilio auth token                      | For SMS (optional) |
+| `TWILIO_PHONE_NUMBER` | Twilio phone number                    | For SMS (optional) |
 
 ### Frontend (.env)
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `REACT_APP_BACKEND_URL` | Backend API URL | Yes |
+| Variable                | Description     | Required |
+| ----------------------- | --------------- | -------- |
+| `REACT_APP_BACKEND_URL` | Backend API URL | Yes      |
 
 ## 📡 API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/signup` - Register new user
 - `POST /api/auth/login` - User login
 - `GET /api/auth/me` - Get current user info
 - `POST /api/auth/subscribe` - Mock subscription (for testing)
 
 ### Posts
+
 - `GET /api/posts` - Get all posts
 - `GET /api/posts/{post_id}` - Get single post
 - `POST /api/posts` - Create post (admin only)
@@ -189,16 +196,19 @@ FaithByExperiments-main/
 - `DELETE /api/posts/{post_id}` - Delete post (admin only)
 
 ### Payments
+
 - `GET /api/payments/config` - Get payment configuration
 - `POST /api/payments/create-order` - Create payment order
 - `POST /api/payments/create-pending-signup-order` - Create order for new signup
 - `POST /api/payments/verify` - Verify payment
 
 ### Password Reset
+
 - `POST /api/password-reset/request` - Request password reset
 - `POST /api/password-reset/confirm` - Confirm password reset
 
 ### Utilities
+
 - `GET /api/health` - Health check
 - `POST /api/seed` - Seed database with initial data
 - `POST /api/create-test-user` - Create test user (for development)
@@ -206,6 +216,7 @@ FaithByExperiments-main/
 ## 👤 Default Admin Credentials
 
 After seeding the database:
+
 - **Email**: `admin@faithbyexperiments.com`
 - **Password**: `admin123`
 
@@ -214,6 +225,7 @@ After seeding the database:
 ## 🧪 Testing
 
 Run backend tests:
+
 ```bash
 cd backend
 pytest
@@ -245,14 +257,17 @@ pytest
 ## 📝 Key Features Implementation
 
 ### Password Visibility Toggle
+
 All password fields include an eye icon to show/hide passwords for better UX.
 
 ### Subscription Management
+
 - Automatic subscription expiry checking
 - Email and SMS notifications for subscription events
 - Razorpay payment integration
 
 ### Content Access Control
+
 - Premium content locked for non-subscribers
 - Preview content available to all users
 - Admin dashboard for content management
@@ -272,6 +287,7 @@ This project is proprietary and confidential.
 ## 👨‍💻 Author
 
 **Ajit Kumar**
+
 - Mechanical Engineer
 - Systems Thinker
 - Experimentalist
@@ -282,4 +298,4 @@ For support, email or contact through the website contact form.
 
 ---
 
-**Faith by Experiments** - *Faith, tested in real life.*
+**Faith by Experiments** - _Faith, tested in real life._

@@ -559,28 +559,25 @@
   }
   
   .about-container {
-    grid-template-columns: 1fr;
-    gap: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
   }
   
   .about-heading {
-    grid-column: 1;
-    grid-row: auto;
     order: 1;
+    margin-bottom: 0;
   }
   
   .about-image {
-    grid-column: 1;
-    grid-row: auto;
     order: 2;
     position: static;
     max-width: 400px;
+    width: 100%;
     margin: 0 auto;
   }
   
   .about-content {
-    grid-column: 1;
-    grid-row: auto;
     order: 3;
   }
   
