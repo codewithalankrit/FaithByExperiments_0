@@ -238,7 +238,7 @@ export const AdminPostEditorPage = ({ user }) => {
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 border rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage ${
+                  className={`w-full px-4 py-3 border rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted ${
                     errors.title ? 'border-red-300' : 'border-black/20'
                   }`}
                   placeholder="Enter post title"
@@ -257,7 +257,7 @@ export const AdminPostEditorPage = ({ user }) => {
                   value={formData.excerpt}
                   onChange={handleChange}
                   rows="3"
-                  className={`w-full px-4 py-3 border rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage resize-y ${
+                  className={`w-full px-4 py-3 border rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted resize-y ${
                     errors.excerpt ? 'border-red-300' : 'border-black/20'
                   }`}
                   placeholder="Brief description that appears in listings"
@@ -295,7 +295,7 @@ export const AdminPostEditorPage = ({ user }) => {
                     name="is_premium"
                     checked={formData.is_premium}
                     onChange={handleChange}
-                    className="w-5 h-5 text-sage border-black/20 rounded focus:ring-sage focus:ring-2"
+                    className="w-5 h-5 text-accent-muted border-black/20 rounded focus:ring-accent-muted focus:ring-2"
                     data-testid="post-premium-checkbox"
                   />
                   <span className="font-sans text-base text-warm-black">Premium Content (requires subscription)</span>
@@ -311,7 +311,7 @@ export const AdminPostEditorPage = ({ user }) => {
                 </Link>
                 <button 
                   type="submit" 
-                  className="inline-flex items-center justify-center gap-2 bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg px-6 py-3 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center justify-center gap-2 bg-accent-muted hover:bg-accent-muted/90 text-white font-sans font-semibold text-base md:text-lg px-6 py-3 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={submitting}
                   data-testid="post-submit-btn"
                 >

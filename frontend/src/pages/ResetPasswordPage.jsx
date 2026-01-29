@@ -130,15 +130,15 @@ export const ResetPasswordPage = () => {
                 <p className="font-sans text-lg text-warm-black/70">
                   Your password has been successfully reset. You'll be redirected to the login page shortly.
                 </p>
-                <Link to="/subscribe?mode=login" className="inline-block w-full bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors text-center">
-                  Sign In Now
+                <Link to="/subscribe?mode=login" className="inline-block w-full bg-accent-muted hover:bg-accent-muted/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors text-center">
+                  Sign In
                 </Link>
               </div>
             ) : !tokenValid ? (
               <div className="text-center space-y-6">
                 <h1 className="font-serif font-bold text-4xl md:text-5xl text-warm-black leading-tight">Invalid Reset Link</h1>
                 <p className="font-sans text-lg text-warm-black/70">{error}</p>
-                <Link to="/forgot-password" className="inline-block w-full bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors text-center">
+                <Link to="/forgot-password" className="inline-block w-full bg-accent-muted hover:bg-accent-muted/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors text-center">
                   Request New Reset Link
                 </Link>
               </div>
@@ -168,7 +168,7 @@ export const ResetPasswordPage = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         minLength="6"
-                        className="w-full px-4 py-3 pr-12 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                        className="w-full px-4 py-3 pr-12 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                         placeholder="Enter new password"
                         data-testid="new-password-input"
                       />
@@ -193,7 +193,7 @@ export const ResetPasswordPage = () => {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
                         minLength="6"
-                        className="w-full px-4 py-3 pr-12 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                        className="w-full px-4 py-3 pr-12 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                         placeholder="Confirm new password"
                         data-testid="confirm-password-input"
                       />
@@ -210,7 +210,7 @@ export const ResetPasswordPage = () => {
 
                   <button 
                     type="submit" 
-                    className="w-full bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-accent-muted hover:bg-accent-muted/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={loading}
                     data-testid="reset-password-btn"
                   >

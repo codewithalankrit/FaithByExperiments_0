@@ -228,10 +228,10 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, onLogout }) => {
             <div className="text-center">
               <Link 
                 to={isSubscribed ? "/flagship-contents" : "/subscribe"} 
-                className="inline-block font-sans font-semibold text-base md:text-lg text-warm-black border-2 border-black/20 px-8 py-4 hover:border-sage hover:text-sage transition-colors"
+                      className="inline-block font-sans font-semibold text-base md:text-lg text-white bg-accent-muted hover:bg-accent-muted/90 px-8 py-4 rounded transition-colors"
                 data-testid="flagship-cta"
               >
-                {isSubscribed ? "View Complete Flagship Contents" : "Subscribe to View Complete Contents"}
+                {isSubscribed ? "Continue Reading" : "Subscribe to Proceed"}
               </Link>
             </div>
           </div>
@@ -256,7 +256,7 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, onLogout }) => {
                   {siteContent.pricing.valuePoints.length > 0 && (
                     <ul className="space-y-5 font-sans text-base md:text-lg text-warm-black/70 leading-relaxed">
                       {siteContent.pricing.valuePoints.map((point, index) => (
-                        <li key={index} className="pl-6 relative before:content-['•'] before:absolute before:left-0 before:text-sage before:text-xl before:font-semibold">
+                        <li key={index} className="pl-6 relative before:content-['•'] before:absolute before:left-0 before:text-accent-muted before:text-xl before:font-semibold">
                           {point}
                         </li>
                       ))}
@@ -293,10 +293,10 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, onLogout }) => {
                   
                   <Link 
                     to="/subscribe" 
-                    className="block w-full text-center font-sans font-semibold text-lg text-white bg-sage hover:bg-sage/90 py-5 transition-colors"
+                    className="block w-full text-center font-sans font-semibold text-lg text-white bg-accent-muted hover:bg-accent-muted/90 py-5 rounded transition-colors"
                     data-testid="pricing-subscribe-btn"
                   >
-                    {siteContent.pricing.cta}
+                    Subscribe to Proceed
                   </Link>
                 </div>
               </div>

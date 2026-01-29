@@ -81,7 +81,7 @@ export const ContactPage = () => {
               <p>These are paid sessions for the people who wish to engage beyond written content.</p>
               <p>
                 Prefer direct contact? Email us at{' '}
-                <a href={`mailto:${siteContent.contact.email}`} className="text-sage hover:text-sage/80 font-medium underline">
+                <a href={`mailto:${siteContent.contact.email}`} className="text-accent-muted hover:text-accent-muted/80 font-medium underline">
                   {siteContent.contact.email}
                 </a>
                 {' '}or WhatsApp{' '}
@@ -89,7 +89,7 @@ export const ContactPage = () => {
                   href={`https://wa.me/${siteContent.contact.whatsappE164.replace('+', '')}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sage hover:text-sage/80 font-medium underline"
+                  className="text-accent-muted hover:text-accent-muted/80 font-medium underline"
                 >
                   {siteContent.contact.whatsappDisplay}
                 </a>
@@ -119,7 +119,7 @@ export const ContactPage = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                     data-testid="contact-name-input"
                   />
                 </div>
@@ -133,7 +133,7 @@ export const ContactPage = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                     data-testid="contact-email-input"
                   />
                 </div>
@@ -146,7 +146,7 @@ export const ContactPage = () => {
                     name="whatsapp"
                     value={formData.whatsapp}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                     placeholder="+91 98765 43210"
                     data-testid="contact-whatsapp-input"
                   />
@@ -162,7 +162,7 @@ export const ContactPage = () => {
                     onChange={handleChange}
                     rows="6"
                     required
-                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage resize-y"
+                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted resize-y"
                     placeholder="Please share your background, areas of interest, and what you hope to explore in an in-person meeting."
                     data-testid="contact-message-input"
                   ></textarea>
@@ -170,7 +170,7 @@ export const ContactPage = () => {
                 
                 <button 
                   type="submit" 
-                  className="w-full bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-accent-muted hover:bg-accent-muted/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={loading}
                   data-testid="contact-submit-btn"
                 >

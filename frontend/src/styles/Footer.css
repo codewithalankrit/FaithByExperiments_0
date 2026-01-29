@@ -21,9 +21,9 @@
 }
 
 .footer-contact-line {
-  white-space: normal;
-  word-break: break-word;
-  overflow-wrap: break-word;
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 .footer-contact-highlight {
@@ -91,6 +91,9 @@
   .footer-contact-line {
     font-size: 0.9rem;
     line-height: 1.6;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   
   .footer-nav {

@@ -219,7 +219,7 @@ export const SubscribePage = ({ onLogin }) => {
                       key={plan.id}
                       className={`border-2 rounded cursor-pointer transition-all p-6 md:p-8 ${
                         selectedPlan === plan.id 
-                          ? 'border-sage bg-sage/5' 
+                          ? 'border-accent-muted bg-accent-muted/5' 
                           : 'border-black/10 hover:border-black/20'
                       }`}
                       onClick={() => setSelectedPlan(plan.id)}
@@ -236,7 +236,7 @@ export const SubscribePage = ({ onLogin }) => {
                         </div>
                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
                           selectedPlan === plan.id 
-                            ? 'border-sage bg-sage' 
+                            ? 'border-accent-muted bg-accent-muted' 
                             : 'border-black/30'
                         }`}>
                           {selectedPlan === plan.id && (
@@ -262,7 +262,7 @@ export const SubscribePage = ({ onLogin }) => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                      className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                       placeholder="Enter your full name"
                       data-testid="signup-name-input"
                     />
@@ -277,7 +277,7 @@ export const SubscribePage = ({ onLogin }) => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                      className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                       placeholder="your@email.com"
                       data-testid="signup-email-input"
                     />
@@ -294,7 +294,7 @@ export const SubscribePage = ({ onLogin }) => {
                         onChange={handleChange}
                         required
                         minLength="6"
-                        className="w-full px-4 py-3 pr-12 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                        className="w-full px-4 py-3 pr-12 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                         placeholder="Create a secure password"
                         data-testid="signup-password-input"
                       />
@@ -317,7 +317,7 @@ export const SubscribePage = ({ onLogin }) => {
                       name="mobile"
                       value={formData.mobile}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                      className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                       placeholder="Enter your mobile number"
                       data-testid="signup-mobile-input"
                     />
@@ -325,15 +325,15 @@ export const SubscribePage = ({ onLogin }) => {
                   
                   <button 
                     type="submit" 
-                    className="w-full bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                    className="w-full bg-accent-muted hover:bg-accent-muted/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
                     disabled={loading}
                     data-testid="signup-submit-btn"
                   >
-                    {loading ? 'Processing...' : 'Continue to Secure Payment'}
+                    {loading ? 'Processing...' : 'Subscribe to Proceed'}
                   </button>
                   
                   <p className="font-sans text-sm text-warm-black/50 text-center">
-                    Cancel anytime. No ads. No spam.
+                    Cancel anytime.
                   </p>
                 </form>
               </div>
@@ -343,7 +343,7 @@ export const SubscribePage = ({ onLogin }) => {
                   Already have an account?{' '}
                   <button 
                     onClick={() => setIsLogin(true)} 
-                    className="text-sage hover:text-sage/80 font-medium underline"
+                    className="text-accent-muted hover:text-accent-muted/80 font-medium underline"
                     data-testid="switch-to-login"
                   >
                     Sign in
@@ -369,7 +369,7 @@ export const SubscribePage = ({ onLogin }) => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                     placeholder="your@email.com"
                     data-testid="login-email-input"
                   />
@@ -385,7 +385,7 @@ export const SubscribePage = ({ onLogin }) => {
                       value={formData.password}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 pr-12 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+                      className="w-full px-4 py-3 pr-12 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                       placeholder="Enter your password"
                       data-testid="login-password-input"
                     />
@@ -398,14 +398,14 @@ export const SubscribePage = ({ onLogin }) => {
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                   </div>
-                  <Link to="/forgot-password" className="block text-sm text-sage hover:text-sage/80 font-medium mt-2" data-testid="forgot-password-link">
+                  <Link to="/forgot-password" className="block text-sm text-accent-muted hover:text-accent-muted/80 font-medium mt-2" data-testid="forgot-password-link">
                     Forgot password?
                   </Link>
                 </div>
               
                 <button 
                   type="submit" 
-                  className="w-full bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                  className="w-full bg-accent-muted hover:bg-accent-muted/90 text-white font-sans font-semibold text-base md:text-lg py-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
                   disabled={loading}
                   data-testid="login-submit-btn"
                 >
@@ -419,10 +419,10 @@ export const SubscribePage = ({ onLogin }) => {
                   Don't have an account?{' '}
                   <button 
                     onClick={() => setIsLogin(false)} 
-                    className="text-sage hover:text-sage/80 font-medium underline"
+                    className="text-accent-muted hover:text-accent-muted/80 font-medium underline"
                     data-testid="switch-to-signup"
                   >
-                    Join now
+                    Subscribe to Proceed
                   </button>
                 </p>
               </div>

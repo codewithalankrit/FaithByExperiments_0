@@ -14,10 +14,10 @@ module.exports = {
   		colors: {
   			'warm-black': '#1B1B1B',
   			'off-white': '#FAFAF8',
-  			'sage': '#6b7c3f',
-  			'olive': '#8a9a5a',
-  			'navy': '#2c3e50',
-  			'clay': '#8b7355',
+  			'accent-muted': '#3A4A5A', // Deep indigo - muted, considered, not emotional
+  			'warm-gray': '#6B6B6B', // Warm gray for secondary text
+  			'charcoal': '#2C2C2C', // Charcoal for strong contrast
+  			'dark-gray': '#4A4A4A', // Dark gray for buttons
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

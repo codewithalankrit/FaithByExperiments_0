@@ -115,7 +115,7 @@ export const AdminDashboardPage = ({ user, onAdminLogout }) => {
               </div>
               <Link 
                 to="/admin/posts/new" 
-                className="inline-flex items-center justify-center gap-2 bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg px-6 py-3 rounded transition-colors" 
+                className="inline-flex items-center justify-center gap-2 bg-accent-muted hover:bg-accent-muted/90 text-white font-sans font-semibold text-base md:text-lg px-6 py-3 rounded transition-colors" 
                 data-testid="create-post-btn"
               >
                 <Plus size={20} />
@@ -134,7 +134,7 @@ export const AdminDashboardPage = ({ user, onAdminLogout }) => {
                 <p className="font-sans text-lg text-warm-black/70">No posts yet. Create your first flagship content post.</p>
                 <Link 
                   to="/admin/posts/new" 
-                  className="inline-flex items-center justify-center gap-2 bg-sage hover:bg-sage/90 text-white font-sans font-semibold text-base md:text-lg px-6 py-3 rounded transition-colors"
+                  className="inline-flex items-center justify-center gap-2 bg-accent-muted hover:bg-accent-muted/90 text-white font-sans font-semibold text-base md:text-lg px-6 py-3 rounded transition-colors"
                 >
                   <Plus size={20} />
                   <span>Create Post</span>
@@ -151,7 +151,7 @@ export const AdminDashboardPage = ({ user, onAdminLogout }) => {
                       <div className="flex items-center gap-2">
                         <Link 
                           to={`/admin/posts/edit/${post.id}`}
-                          className="p-2 text-warm-black/60 hover:text-sage transition-colors"
+                          className="p-2 text-warm-black/60 hover:text-accent-muted transition-colors"
                           title="Edit post"
                           data-testid={`edit-post-${post.id}`}
                         >

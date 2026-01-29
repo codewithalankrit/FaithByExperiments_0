@@ -39,15 +39,15 @@ code {
         --border-medium: #d0d0ce;
         --border-strong: #b0b0ae;
         
-        /* Brand - Subtle muted accent */
-        --brand-primary: #6b7c3f;
-        --brand-hover: #58663a;
-        --brand-active: #4a5530;
+        /* Brand - Muted accent (deep indigo - considered, not emotional) */
+        --brand-primary: #3A4A5A;
+        --brand-hover: #2A3A4A;
+        --brand-active: #1A2A3A;
         
         /* Supporting colors */
-        --secondary-olive: #8a9a5a;
+        --warm-gray: #6B6B6B;
         --secondary-muted: #9a9a98;
-        --link-color: #4a5a6a;
+        --link-color: #3A4A5A;
         
         /* Shadcn variables */
         --background: 0 0% 100%;
@@ -98,4 +98,18 @@ code {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* Proper word wrapping to prevent words from being cut off */
+.prose,
+.prose p,
+.prose div,
+.prose * {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  hyphens: none !important;
+  white-space: normal !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
