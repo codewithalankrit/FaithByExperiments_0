@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, LogOut } from 'lucide-react';
 import { postsAPI, authAPI, getUser } from '../services/api';
@@ -8,10 +8,12 @@ export const AdminDashboardPage = ({ user, onAdminLogout }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const isLoggingOutRef = useRef(false);
 
   useEffect(() => {
     // Check if user is logged in and is admin
     const currentUser = user || getUser();
+    if (isLoggingOutRef.current) return;
     if (!currentUser || !currentUser.is_admin) {
       navigate('/admin/login');
       return;
@@ -34,9 +36,10 @@ export const AdminDashboardPage = ({ user, onAdminLogout }) => {
   }, [navigate, user]);
 
   const handleLogout = () => {
+    isLoggingOutRef.current = true;
     authAPI.logout();
     if (onAdminLogout) onAdminLogout();
-    navigate('/');
+    navigate('/subscribe?mode=login', { replace: true });
   };
 
   const handleDelete = async (postId) => {
