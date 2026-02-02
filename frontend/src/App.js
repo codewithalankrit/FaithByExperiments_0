@@ -7,7 +7,6 @@ import { SubscribePage } from "./pages/SubscribePage";
 import { ContactPage } from "./pages/ContactPage";
 import { FlagshipContentsPage } from "./pages/FlagshipContentsPage";
 import { FlagshipContentDetailPage } from "./pages/FlagshipContentDetailPage";
-import { AdminLoginPage } from "./pages/AdminLoginPage";
 import { AdminDashboardPage } from "./pages/AdminDashboardPage";
 import { AdminPostEditorPage } from "./pages/AdminPostEditorPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
@@ -125,10 +124,6 @@ function App() {
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             
             {/* Admin Routes */}
-            <Route 
-              path="/admin/login" 
-              element={<AdminLoginPage onAdminLogin={handleLogin} />} 
-            />
             <Route 
               path="/admin/dashboard" 
               element={<AdminDashboardPage user={user} onAdminLogout={handleLogout} />} 

@@ -15,7 +15,7 @@ export const AdminDashboardPage = ({ user, onAdminLogout }) => {
     const currentUser = user || getUser();
     if (isLoggingOutRef.current) return;
     if (!currentUser || !currentUser.is_admin) {
-      navigate('/admin/login');
+      navigate('/subscribe?mode=login', { replace: true });
       return;
     }
 

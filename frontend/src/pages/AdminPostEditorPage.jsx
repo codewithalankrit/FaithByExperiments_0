@@ -92,7 +92,7 @@ export const AdminPostEditorPage = ({ user }) => {
     // Check if user is logged in and is admin
     const currentUser = user || getUser();
     if (!currentUser || !currentUser.is_admin) {
-      navigate('/admin/login');
+      navigate('/subscribe?mode=login', { replace: true });
       return;
     }
 
