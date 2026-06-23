@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, Header
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from typing import Optional
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from models.user import UserCreate, UserLogin, UserInDB, UserResponse, TokenResponse
 from utils.auth import hash_password, verify_password, create_access_token, decode_token
@@ -20,6 +20,32 @@ def set_db(database):
 
 def get_db() -> AsyncIOMotorDatabase:
     return _db
+
+
+def resolve_subscription_end_at(user_doc: dict) -> Optional[str]:
+    """Return stored or computed subscription expiry for API responses."""
+    if user_doc.get("subscription_end_at"):
+        return user_doc.get("subscription_end_at")
+
+    subscription_type = user_doc.get("subscription_type")
+    if not subscription_type or subscription_type == "lifetime":
+        return None
+
+    start_str = user_doc.get("subscription_started_at") or user_doc.get("created_at")
+    if not start_str:
+        return None
+
+    start_date = datetime.fromisoformat(start_str.replace("Z", "+00:00"))
+    if subscription_type == "yearly":
+        end_date = start_date + timedelta(days=365)
+    elif subscription_type == "three_year":
+        end_date = start_date + timedelta(days=365 * 3)
+    elif subscription_type == "monthly":
+        end_date = start_date + timedelta(days=30)
+    else:
+        end_date = start_date + timedelta(days=365)
+
+    return end_date.isoformat()
 
 
 async def get_current_user(
@@ -56,7 +82,8 @@ async def get_current_user(
         name=user_doc["name"],
         is_admin=user_doc.get("is_admin", False),
         is_subscribed=user_doc.get("is_subscribed", False),
-        subscription_type=user_doc.get("subscription_type")
+        subscription_type=user_doc.get("subscription_type"),
+        subscription_end_at=resolve_subscription_end_at(user_doc)
     )
 
 
@@ -121,7 +148,8 @@ async def signup(user_data: UserCreate):
             name=user.name,
             is_admin=user.is_admin,
             is_subscribed=user.is_subscribed,
-            subscription_type=user.subscription_type
+            subscription_type=user.subscription_type,
+            subscription_end_at=None
         )
     )
 
@@ -150,7 +178,8 @@ async def login(credentials: UserLogin):
             name=user_doc["name"],
             is_admin=user_doc.get("is_admin", False),
             is_subscribed=user_doc.get("is_subscribed", False),
-            subscription_type=user_doc.get("subscription_type")
+            subscription_type=user_doc.get("subscription_type"),
+            subscription_end_at=resolve_subscription_end_at(user_doc)
         )
     )
 

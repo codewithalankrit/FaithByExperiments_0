@@ -16,23 +16,26 @@ from datetime import datetime, timezone, timedelta
 import os
 import uuid
 
+try:
+    import razorpay
+except ImportError:
+    razorpay = None
+
 router = APIRouter(prefix="/payments", tags=["Payments"])
 
 # Razorpay configuration
-RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "")
-RAZORPAY_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "")
+RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "").strip()
+RAZORPAY_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "").strip()
 
 # Check if Razorpay is configured
-RAZORPAY_CONFIGURED = bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET)
+RAZORPAY_CONFIGURED = bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET and razorpay)
 
 # Initialize Razorpay client only if configured
 razorpay_client = None
 if RAZORPAY_CONFIGURED:
-    try:
-        import razorpay
-        razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
-    except ImportError:
-        print("Razorpay SDK not installed. Run: pip install razorpay")
+    razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
+elif not razorpay:
+    print("Razorpay SDK not installed. Run: pip install razorpay")
 
 # Database will be injected from server.py
 _db = None
@@ -45,39 +48,52 @@ def get_db():
     return _db
 
 
-# Subscription plans (amounts in paise - multiply by 100)
+# Subscription plans (amounts in paise)
 PLANS = {
-    "monthly": {
-        "name": "Monthly Subscription",
-        "amount": 49900,  # ₹499.00
-        "currency": "INR",
-        "period": "month"
-    },
     "yearly": {
         "name": "Yearly Subscription",
-        "amount": 499900,  # ₹4,999.00
+        "amount": 99900,  # ₹999.00
         "currency": "INR",
         "period": "year"
+    },
+    "three_year": {
+        "name": "3 Year Subscription",
+        "amount": 199900,  # ₹1,999.00
+        "currency": "INR",
+        "period": "3 years"
+    },
+    "lifetime": {
+        "name": "Lifetime Access",
+        "amount": 499900,  # ₹4,999.00
+        "currency": "INR",
+        "period": "lifetime"
     }
 }
 
 
-def calculate_subscription_end_date(subscription_type: str, start_date: datetime = None) -> datetime:
+def calculate_subscription_end_date(
+    subscription_type: str,
+    start_date: datetime = None
+) -> Optional[datetime]:
     """Calculate subscription end date based on subscription type."""
     if start_date is None:
         start_date = datetime.now(timezone.utc)
-    
-    if subscription_type == "monthly":
-        return start_date + timedelta(days=30)
-    elif subscription_type == "yearly":
+
+    if subscription_type == "yearly":
         return start_date + timedelta(days=365)
-    else:
-        # Default to 30 days if unknown
+    elif subscription_type == "three_year":
+        return start_date + timedelta(days=365 * 3)
+    elif subscription_type == "lifetime":
+        return None
+    elif subscription_type == "monthly":
+        # Legacy plan support
         return start_date + timedelta(days=30)
+    else:
+        return start_date + timedelta(days=365)
 
 
 class CreateOrderRequest(BaseModel):
-    plan_id: str  # "monthly" or "yearly"
+    plan_id: str  # "yearly", "three_year", or "lifetime"
 
 
 class CreatePendingSignupOrderRequest(BaseModel):
@@ -303,7 +319,9 @@ async def verify_payment(
             user_dict["created_at"] = user_dict["created_at"].isoformat()
             user_dict["updated_at"] = user_dict["updated_at"].isoformat()
             user_dict["subscription_started_at"] = subscription_started_at.isoformat()
-            user_dict["subscription_end_at"] = subscription_end_at.isoformat()
+            user_dict["subscription_end_at"] = (
+                subscription_end_at.isoformat() if subscription_end_at else None
+            )
             
             await db.users.insert_one(user_dict)
             
@@ -348,7 +366,8 @@ async def verify_payment(
                     name=user.name,
                     is_admin=user.is_admin,
                     is_subscribed=user.is_subscribed,
-                    subscription_type=user.subscription_type
+                    subscription_type=user.subscription_type,
+                    subscription_end_at=user_dict.get("subscription_end_at")
                 ).model_dump()
             }
         
@@ -379,17 +398,18 @@ async def verify_payment(
             subscription_end_at = calculate_subscription_end_date(order["plan_id"], subscription_started_at)
             
             # Activate user subscription
+            subscription_update = {
+                "is_subscribed": True,
+                "subscription_type": order["plan_id"],
+                "subscription_started_at": subscription_started_at.isoformat(),
+                "subscription_end_at": (
+                    subscription_end_at.isoformat() if subscription_end_at else None
+                ),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
             await db.users.update_one(
                 {"id": user.id},
-                {
-                    "$set": {
-                        "is_subscribed": True,
-                        "subscription_type": order["plan_id"],
-                        "subscription_started_at": subscription_started_at.isoformat(),
-                        "subscription_end_at": subscription_end_at.isoformat(),
-                        "updated_at": datetime.now(timezone.utc).isoformat()
-                    }
-                }
+                {"$set": subscription_update}
             )
             
             # Get updated user data for notification
@@ -414,9 +434,11 @@ async def verify_payment(
                 "subscription_type": order["plan_id"]
             }
         
-    except razorpay.errors.SignatureVerificationError:
-        raise HTTPException(status_code=400, detail="Invalid payment signature")
     except Exception as e:
+        if razorpay and isinstance(e, razorpay.errors.SignatureVerificationError):
+            raise HTTPException(status_code=400, detail="Invalid payment signature")
+        if isinstance(e, HTTPException):
+            raise
         raise HTTPException(status_code=500, detail=f"Payment verification failed: {str(e)}")
 
 

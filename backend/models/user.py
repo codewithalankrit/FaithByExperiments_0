@@ -29,7 +29,7 @@ class UserInDB(BaseModel):
     password_hash: str
     is_admin: bool = False
     is_subscribed: bool = False
-    subscription_type: Optional[str] = None  # "monthly" or "yearly"
+    subscription_type: Optional[str] = None  # "yearly", "three_year", or "lifetime"
     mobile: Optional[str] = None
     subscription_started_at: Optional[datetime] = None
     subscription_end_at: Optional[datetime] = None
@@ -46,6 +46,7 @@ class UserResponse(BaseModel):
     is_admin: bool
     is_subscribed: bool
     subscription_type: Optional[str] = None
+    subscription_end_at: Optional[str] = None
 
 
 class TokenResponse(BaseModel):

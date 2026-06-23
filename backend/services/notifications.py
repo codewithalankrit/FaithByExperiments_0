@@ -81,6 +81,18 @@ async def send_sms(to: str, message: str) -> bool:
         return False
 
 
+PLAN_LABELS = {
+    "yearly": "Yearly",
+    "three_year": "3 Year",
+    "lifetime": "Lifetime",
+    "monthly": "Monthly",
+}
+
+
+def get_plan_label(subscription_type: str) -> str:
+    return PLAN_LABELS.get(subscription_type, subscription_type.replace("_", " ").title())
+
+
 async def send_subscription_purchase_notification(
     user_name: str,
     user_email: str,
@@ -92,8 +104,8 @@ async def send_subscription_purchase_notification(
     results = {"email_sent": False, "sms_sent": False}
     
     # Email content
-    period_text = "monthly" if subscription_type == "monthly" else "yearly"
-    email_subject = f"Welcome! Your {period_text.capitalize()} Subscription is Active - Faith by Experiments"
+    period_text = get_plan_label(subscription_type)
+    email_subject = f"Welcome! Your {period_text} Subscription is Active - Faith by Experiments"
     
     email_html = f"""
     <!DOCTYPE html>
@@ -119,7 +131,7 @@ async def send_subscription_purchase_notification(
                 <p>Thank you for subscribing to Faith by Experiments!</p>
                 <div class="highlight">
                     <p style="margin: 0;"><strong>Subscription Details:</strong></p>
-                    <p style="margin: 8px 0 0 0;">Plan: {period_text.capitalize()} Subscription</p>
+                    <p style="margin: 8px 0 0 0;">Plan: {period_text} Subscription</p>
                     <p style="margin: 8px 0 0 0;">Amount: ₹{amount}</p>
                     <p style="margin: 8px 0 0 0;">Status: Active</p>
                 </div>
@@ -165,8 +177,8 @@ async def send_subscription_expiry_notification(
     results = {"email_sent": False, "sms_sent": False}
     
     # Email content
-    period_text = "monthly" if subscription_type == "monthly" else "yearly"
-    email_subject = f"Your {period_text.capitalize()} Subscription Has Expired - Faith by Experiments"
+    period_text = get_plan_label(subscription_type)
+    email_subject = f"Your {period_text} Subscription Has Expired - Faith by Experiments"
     
     email_html = f"""
     <!DOCTYPE html>
@@ -194,7 +206,7 @@ async def send_subscription_expiry_notification(
                 <p>We wanted to let you know that your {period_text} subscription to Faith by Experiments has expired.</p>
                 <div class="highlight">
                     <p style="margin: 0;"><strong>Subscription Status:</strong></p>
-                    <p style="margin: 8px 0 0 0;">Plan: {period_text.capitalize()} Subscription</p>
+                    <p style="margin: 8px 0 0 0;">Plan: {period_text} Subscription</p>
                     <p style="margin: 8px 0 0 0;">Status: Expired</p>
                 </div>
                 <p>Your access to premium content has been temporarily suspended. To continue your journey of faith through experimentation, please renew your subscription.</p>

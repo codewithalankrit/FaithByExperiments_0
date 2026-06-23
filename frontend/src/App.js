@@ -12,7 +12,7 @@ import { AdminPostEditorPage } from "./pages/AdminPostEditorPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { ScrollToTop } from "./components/ScrollToTop";
-import { getUser, removeToken, removeUser, seedDatabase } from "./services/api";
+import { getUser, removeToken, removeUser, seedDatabase, authAPI, setUser as setStoredUser } from "./services/api";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -25,6 +25,13 @@ function App() {
       const storedUser = getUser();
       if (storedUser) {
         setUser(storedUser);
+        try {
+          const freshUser = await authAPI.getMe();
+          setUser(freshUser);
+          setStoredUser(freshUser);
+        } catch (e) {
+          console.log('Could not refresh user session:', e.message);
+        }
       }
       
       // Always set loading to false immediately so app can render
@@ -87,6 +94,7 @@ function App() {
                   isLoggedIn={isLoggedIn} 
                   isSubscribed={isSubscribed} 
                   isAdmin={isAdmin}
+                  user={user}
                   onLogout={handleLogout} 
                 />
               } 

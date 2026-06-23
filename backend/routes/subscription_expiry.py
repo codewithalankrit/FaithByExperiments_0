@@ -29,7 +29,8 @@ async def check_and_notify_expired_subscriptions():
     # Find users where subscription_end_at is in the past and is_subscribed is still True
     expired_users = await db.users.find({
         "is_subscribed": True,
-        "subscription_end_at": {"$lt": current_time.isoformat()}
+        "subscription_type": {"$ne": "lifetime"},
+        "subscription_end_at": {"$exists": True, "$ne": None, "$lt": current_time.isoformat()}
     }).to_list(length=None)
     
     notification_results = []

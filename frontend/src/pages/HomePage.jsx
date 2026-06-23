@@ -6,7 +6,15 @@ import { postsAPI } from '../services/api';
 import { HomePageSEO } from '../components/SEO';
 import { Link } from 'react-router-dom';
 
-export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, onLogout }) => {
+const formatSubscriptionEndDate = (dateString) => {
+  return new Date(dateString).toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+};
+
+export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, user, onLogout }) => {
   const [flagshipPreviewPost, setFlagshipPreviewPost] = useState(null);
 
   useEffect(() => {
@@ -41,6 +49,10 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, onLogout }) => {
         return stripped.length > 500 ? stripped.substring(0, 500) + '...' : stripped;
       })()
     : siteContent.flagshipPreview.previewContent;
+
+  const subscriptionExpiryDate = user?.subscription_end_at
+    ? formatSubscriptionEndDate(user.subscription_end_at)
+    : null;
 
   return (
     <div className="min-h-screen bg-off-white relative" data-testid="home-page">
@@ -300,6 +312,17 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, onLogout }) => {
                   </Link>
                 </div>
               </div>
+            </div>
+          </section>
+        )}
+
+        {isSubscribed && subscriptionExpiryDate && (
+          <section className="py-20 md:py-24 border-b border-black/10 bg-off-white/30" data-testid="subscription-status">
+            <div className="max-w-4xl mx-auto px-6 md:px-8 lg:px-12 text-center">
+              <p className="font-sans text-lg md:text-xl text-warm-black/80">
+                Valid subscription upto{' '}
+                <span className="font-semibold text-warm-black">{subscriptionExpiryDate}</span>
+              </p>
             </div>
           </section>
         )}

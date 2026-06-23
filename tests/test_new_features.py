@@ -177,20 +177,24 @@ class TestRazorpayPayments:
         data = response.json()
         
         plans = data["plans"]
-        assert "monthly" in plans
         assert "yearly" in plans
+        assert "three_year" in plans
+        assert "lifetime" in plans
         
-        # Verify monthly plan structure
-        monthly = plans["monthly"]
-        assert monthly["name"] == "Monthly Subscription"
-        assert monthly["amount"] == 49900  # ₹499.00 in paise
-        assert monthly["currency"] == "INR"
-        
-        # Verify yearly plan structure
         yearly = plans["yearly"]
         assert yearly["name"] == "Yearly Subscription"
-        assert yearly["amount"] == 499900  # ₹4,999.00 in paise
+        assert yearly["amount"] == 99900  # ₹999.00 in paise
         assert yearly["currency"] == "INR"
+        
+        three_year = plans["three_year"]
+        assert three_year["name"] == "3 Year Subscription"
+        assert three_year["amount"] == 199900  # ₹1,999.00 in paise
+        assert three_year["currency"] == "INR"
+
+        lifetime = plans["lifetime"]
+        assert lifetime["name"] == "Lifetime Access"
+        assert lifetime["amount"] == 499900  # ₹4,999.00 in paise
+        assert lifetime["currency"] == "INR"
     
     def test_create_order_returns_error_when_not_configured(self):
         """Test create order returns error when Razorpay not configured"""
@@ -205,7 +209,7 @@ class TestRazorpayPayments:
         # Try to create order
         response = requests.post(
             f"{BASE_URL}/api/payments/create-order",
-            json={"plan_id": "monthly"},
+            json={"plan_id": "yearly"},
             headers={"Authorization": f"Bearer {token}"}
         )
         # 503 from FastAPI may be converted to 520 by Cloudflare
@@ -217,7 +221,7 @@ class TestRazorpayPayments:
         """Test create order requires authentication or returns not configured"""
         response = requests.post(
             f"{BASE_URL}/api/payments/create-order",
-            json={"plan_id": "monthly"}
+            json={"plan_id": "yearly"}
         )
         # Should return 503/520 (not configured) before checking auth, or 401 if auth checked first
         assert response.status_code in [401, 503, 520]
