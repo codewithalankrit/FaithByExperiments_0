@@ -208,28 +208,6 @@ The methodology is simple but demanding: treat every spiritual proposition as a 
 # Include the router in the main app
 app.include_router(api_router)
 
-@app.get("/debug-installed")
-async def debug_installed():
-    try:
-        import razorpay
-        import setuptools
-
-        return {
-            "razorpay": True,
-            "setuptools": setuptools.__version__
-        }
-    except Exception as e:
-        return {
-            "error": str(e)
-        }
-
-
-@app.get("/code-version")
-async def code_version():
-    return {
-        "version": "24-JUNE-RAZORPAY-FIX"
-    }
-
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,

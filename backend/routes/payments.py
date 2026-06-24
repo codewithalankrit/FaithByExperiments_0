@@ -4,7 +4,6 @@ from typing import Optional
 from datetime import datetime, timezone, timedelta
 import os
 import uuid
-import sys
 
 try:
     import razorpay
@@ -13,21 +12,13 @@ except ImportError:
 
 router = APIRouter(prefix="/payments", tags=["Payments"])
 
-print("PAYMENTS FILE VERSION = 24-JUNE-FIX")
-
 # Razorpay configuration
 RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "").strip()
 RAZORPAY_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "").strip()
 RAZORPAY_WEBHOOK_SECRET = os.environ.get("RAZORPAY_WEBHOOK_SECRET", "").strip()
 
-# Debug logging
-print(f"RAZORPAY_KEY_ID loaded: {'YES' if RAZORPAY_KEY_ID else 'NO'}")
-print(f"RAZORPAY_KEY_SECRET loaded: {'YES' if RAZORPAY_KEY_SECRET else 'NO'}")
-print(f"razorpay module loaded: {'YES' if razorpay else 'NO'}")
-
 # Check if Razorpay is configured
 RAZORPAY_CONFIGURED = bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET and razorpay)
-print(f"RAZORPAY_CONFIGURED: {RAZORPAY_CONFIGURED}")
 
 # Initialize Razorpay client only if configured
 razorpay_client = None
@@ -45,80 +36,6 @@ def set_db(database):
 
 def get_db():
     return _db
-
-
-@router.get("/debug-razorpay")
-async def debug_razorpay():
-    try:
-        import razorpay
-        return {
-            "installed": True,
-            "module": str(razorpay),
-            "file": getattr(razorpay, "__file__", "unknown")
-        }
-
-    except Exception as e:
-        return {
-            "installed": False,
-            "error": str(e)
-        }
-
-
-@router.get("/python-version")
-async def python_version():
-    return {
-        "version": sys.version
-    }
-
-
-@router.get("/debug-pkg")
-async def debug_pkg():
-    try:
-        import pkg_resources
-        return {
-            "pkg_resources": True,
-            "file": pkg_resources.__file__
-        }
-    except Exception as e:
-        return {
-            "pkg_resources": False,
-            "error": str(e)
-        }
-
-
-@router.get("/debug-setuptools")
-async def debug_setuptools():
-    try:
-        import setuptools
-        return {
-            "installed": True,
-            "version": setuptools.__version__,
-            "file": setuptools.__file__
-        }
-    except Exception as e:
-        return {
-            "installed": False,
-            "error": str(e)
-        }
-
-
-@router.get("/debug-imports")
-async def debug_imports():
-    result = {}
-
-    try:
-        import razorpay
-        result["razorpay"] = "OK"
-    except Exception as e:
-        result["razorpay"] = str(e)
-
-    try:
-        import pkg_resources
-        result["pkg_resources"] = "OK"
-    except Exception as e:
-        result["pkg_resources"] = str(e)
-
-    return result
 
 
 # Subscription plans (amounts in paise)
