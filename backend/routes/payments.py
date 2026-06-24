@@ -50,8 +50,10 @@ async def debug_razorpay():
         import razorpay
         return {
             "installed": True,
-            "version": razorpay.__version__
+            "module": str(razorpay),
+            "file": getattr(razorpay, "__file__", "unknown")
         }
+
     except Exception as e:
         return {
             "installed": False,
