@@ -114,16 +114,23 @@ export const ResetPasswordPage = () => {
         }}
       />
       <div className="relative z-10 min-h-screen flex flex-col">
-        <div className="max-w-md mx-auto w-full px-6 md:px-8 lg:px-12 py-12 md:py-16">
-          <Link to="/" className="inline-block mb-8">
+        <div className="max-w-4xl mx-auto w-full px-6 md:px-8 lg:px-12 py-12 md:py-16">
+          <Link to="/" className="flex justify-center mb-8">
             <img 
               src="/Logo.png" 
               alt="Faith by Experiments" 
-              className="h-12 md:h-14"
+              className="h-20 md:h-28 lg:h-36"
             />
           </Link>
 
-          <div className="max-w-md mx-auto space-y-8">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-warm-black/60 hover:text-warm-black font-sans text-sm md:text-base mb-8 transition-colors"
+          >
+            ← Back to Home
+          </Link>
+
+          <div className="max-w-2xl mx-auto space-y-12 md:space-y-16">
             {success ? (
               <div className="text-center space-y-6">
                 <h1 className="font-serif font-bold text-4xl md:text-5xl text-warm-black leading-tight">Password Reset Complete</h1>
@@ -220,10 +227,6 @@ export const ResetPasswordPage = () => {
               </>
             )}
           </div>
-
-          <Link to="/" className="inline-flex items-center gap-2 text-warm-black/60 hover:text-warm-black font-sans text-sm md:text-base mt-8 transition-colors">
-            ← Back to Home
-          </Link>
         </div>
       </div>
     </div>
