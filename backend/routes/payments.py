@@ -69,6 +69,21 @@ async def python_version():
     }
 
 
+@router.get("/debug-pkg")
+async def debug_pkg():
+    try:
+        import pkg_resources
+        return {
+            "pkg_resources": True,
+            "file": pkg_resources.__file__
+        }
+    except Exception as e:
+        return {
+            "pkg_resources": False,
+            "error": str(e)
+        }
+
+
 # Subscription plans (amounts in paise)
 PLANS = {
     "yearly": {
