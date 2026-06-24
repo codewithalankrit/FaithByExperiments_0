@@ -100,6 +100,25 @@ async def debug_setuptools():
         }
 
 
+@router.get("/debug-imports")
+async def debug_imports():
+    result = {}
+
+    try:
+        import razorpay
+        result["razorpay"] = "OK"
+    except Exception as e:
+        result["razorpay"] = str(e)
+
+    try:
+        import pkg_resources
+        result["pkg_resources"] = "OK"
+    except Exception as e:
+        result["pkg_resources"] = str(e)
+
+    return result
+
+
 # Subscription plans (amounts in paise)
 PLANS = {
     "yearly": {
