@@ -44,6 +44,21 @@ def get_db():
     return _db
 
 
+@router.get("/debug-razorpay")
+async def debug_razorpay():
+    try:
+        import razorpay
+        return {
+            "installed": True,
+            "version": razorpay.__version__
+        }
+    except Exception as e:
+        return {
+            "installed": False,
+            "error": str(e)
+        }
+
+
 # Subscription plans (amounts in paise)
 PLANS = {
     "yearly": {
