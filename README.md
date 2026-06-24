@@ -159,18 +159,19 @@ FaithByExperiments-main/
 
 ### Backend (.env)
 
-| Variable              | Description                            | Required           |
-| --------------------- | -------------------------------------- | ------------------ |
-| `MONGODB_URI`         | MongoDB Atlas connection string        | Yes                |
-| `DB_NAME`             | Database name                          | Yes                |
-| `CORS_ORIGINS`        | Allowed CORS origins (comma-separated) | Yes                |
-| `JWT_SECRET`          | Secret key for JWT tokens              | Yes                |
-| `FRONTEND_URL`        | Frontend application URL               | Yes                |
-| `RAZORPAY_KEY_ID`     | Razorpay API key ID                    | For payments       |
-| `RAZORPAY_KEY_SECRET` | Razorpay API secret                    | For payments       |
-| `TWILIO_ACCOUNT_SID`  | Twilio account SID                     | For SMS (optional) |
-| `TWILIO_AUTH_TOKEN`   | Twilio auth token                      | For SMS (optional) |
-| `TWILIO_PHONE_NUMBER` | Twilio phone number                    | For SMS (optional) |
+| Variable                  | Description                            | Required             |
+| ------------------------- | -------------------------------------- | -------------------- |
+| `MONGODB_URI`             | MongoDB Atlas connection string        | Yes                  |
+| `DB_NAME`                 | Database name                          | Yes                  |
+| `CORS_ORIGINS`            | Allowed CORS origins (comma-separated) | Yes                  |
+| `JWT_SECRET`              | Secret key for JWT tokens              | Yes                  |
+| `FRONTEND_URL`            | Frontend application URL               | Yes                  |
+| `RAZORPAY_KEY_ID`         | Razorpay API key ID                    | For payments         |
+| `RAZORPAY_KEY_SECRET`     | Razorpay API secret                    | For payments         |
+| `RAZORPAY_WEBHOOK_SECRET` | Razorpay webhook secret                | For payment webhooks |
+| `TWILIO_ACCOUNT_SID`      | Twilio account SID                     | For SMS (optional)   |
+| `TWILIO_AUTH_TOKEN`       | Twilio auth token                      | For SMS (optional)   |
+| `TWILIO_PHONE_NUMBER`     | Twilio phone number                    | For SMS (optional)   |
 
 ### Frontend (.env)
 
@@ -201,6 +202,7 @@ FaithByExperiments-main/
 - `POST /api/payments/create-order` - Create payment order
 - `POST /api/payments/create-pending-signup-order` - Create order for new signup
 - `POST /api/payments/verify` - Verify payment
+- `POST /api/payments/webhook` - Razorpay webhook endpoint
 
 ### Password Reset
 

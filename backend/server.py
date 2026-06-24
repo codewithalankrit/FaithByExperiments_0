@@ -10,7 +10,7 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
-uri = os.getenv("MONGODB_URI") + "&tls=true"
+uri = os.getenv("MONGODB_URI")
 client = AsyncIOMotorClient(uri)
 db = client[os.getenv("DB_NAME", "faith_db")]
 
