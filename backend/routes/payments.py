@@ -17,8 +17,14 @@ RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "").strip()
 RAZORPAY_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "").strip()
 RAZORPAY_WEBHOOK_SECRET = os.environ.get("RAZORPAY_WEBHOOK_SECRET", "").strip()
 
+# Debug logging
+print(f"RAZORPAY_KEY_ID loaded: {'YES' if RAZORPAY_KEY_ID else 'NO'}")
+print(f"RAZORPAY_KEY_SECRET loaded: {'YES' if RAZORPAY_KEY_SECRET else 'NO'}")
+print(f"razorpay module loaded: {'YES' if razorpay else 'NO'}")
+
 # Check if Razorpay is configured
 RAZORPAY_CONFIGURED = bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET and razorpay)
+print(f"RAZORPAY_CONFIGURED: {RAZORPAY_CONFIGURED}")
 
 # Initialize Razorpay client only if configured
 razorpay_client = None
