@@ -84,6 +84,22 @@ async def debug_pkg():
         }
 
 
+@router.get("/debug-setuptools")
+async def debug_setuptools():
+    try:
+        import setuptools
+        return {
+            "installed": True,
+            "version": setuptools.__version__,
+            "file": setuptools.__file__
+        }
+    except Exception as e:
+        return {
+            "installed": False,
+            "error": str(e)
+        }
+
+
 # Subscription plans (amounts in paise)
 PLANS = {
     "yearly": {
