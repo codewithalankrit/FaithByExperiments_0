@@ -4,6 +4,7 @@ from typing import Optional
 from datetime import datetime, timezone, timedelta
 import os
 import uuid
+import sys
 
 try:
     import razorpay
@@ -59,6 +60,13 @@ async def debug_razorpay():
             "installed": False,
             "error": str(e)
         }
+
+
+@router.get("/python-version")
+async def python_version():
+    return {
+        "version": sys.version
+    }
 
 
 # Subscription plans (amounts in paise)
