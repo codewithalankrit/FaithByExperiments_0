@@ -13,6 +13,8 @@ except ImportError:
 
 router = APIRouter(prefix="/payments", tags=["Payments"])
 
+print("PAYMENTS FILE VERSION = 24-JUNE-FIX")
+
 # Razorpay configuration
 RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "").strip()
 RAZORPAY_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "").strip()

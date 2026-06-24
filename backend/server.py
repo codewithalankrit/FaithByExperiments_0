@@ -223,6 +223,13 @@ async def debug_installed():
             "error": str(e)
         }
 
+
+@app.get("/code-version")
+async def code_version():
+    return {
+        "version": "24-JUNE-RAZORPAY-FIX"
+    }
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
