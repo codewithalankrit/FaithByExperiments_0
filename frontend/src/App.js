@@ -9,6 +9,7 @@ import { FlagshipContentsPage } from "./pages/FlagshipContentsPage";
 import { FlagshipContentDetailPage } from "./pages/FlagshipContentDetailPage";
 import { AdminDashboardPage } from "./pages/AdminDashboardPage";
 import { AdminPostEditorPage } from "./pages/AdminPostEditorPage";
+import { ensureGoogleFontsLoaded } from "./utils/quillConfig";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { ScrollToTop } from "./components/ScrollToTop";
@@ -19,6 +20,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    ensureGoogleFontsLoaded();
     // Initialize: seed database and restore user session
     const init = async () => {
       // Restore user session from localStorage first (don't wait for backend)

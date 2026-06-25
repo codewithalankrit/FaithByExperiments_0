@@ -3,6 +3,15 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Save } from 'lucide-react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
+import '../styles/quillEditor.css';
+import {
+  buildQuillModules,
+  ensureGoogleFontsLoaded,
+  generateExcerpt,
+  getInitialEditorContent,
+  QUILL_FORMATS,
+} from '../utils/quillConfig';
+import { setupQuillToolbar } from '../utils/quillToolbar';
 import { postsAPI, getUser, uploadImage } from '../services/api';
 
 export const AdminPostEditorPage = ({ user }) => {
@@ -12,9 +21,8 @@ export const AdminPostEditorPage = ({ user }) => {
 
   const [formData, setFormData] = useState({
     title: '',
-    excerpt: '',
     content: '',
-    is_premium: true
+    is_premium: true,
   });
 
   const [errors, setErrors] = useState({});
@@ -22,7 +30,6 @@ export const AdminPostEditorPage = ({ user }) => {
   const [submitting, setSubmitting] = useState(false);
   const quillRef = useRef(null);
 
-  // Image upload handler
   const handleImageUpload = useCallback(() => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
@@ -33,7 +40,6 @@ export const AdminPostEditorPage = ({ user }) => {
       const file = input.files?.[0];
       if (!file) return;
 
-      // Check file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert('Image size must be less than 5MB');
         return;
@@ -43,60 +49,50 @@ export const AdminPostEditorPage = ({ user }) => {
         const quill = quillRef.current?.getEditor();
         if (!quill) return;
 
-        // Show loading indicator
         const range = quill.getSelection(true);
         quill.insertText(range.index, 'Uploading image...', 'user');
         quill.setSelection(range.index + 19);
 
-        // Upload image
         const imageUrl = await uploadImage(file);
 
-        // Remove loading text and insert image
         quill.deleteText(range.index, 19);
         quill.insertEmbed(range.index, 'image', imageUrl);
         quill.setSelection(range.index + 1);
       } catch (error) {
-        alert('Failed to upload image: ' + error.message);
+        alert(`Failed to upload image: ${error.message}`);
         console.error('Image upload error:', error);
       }
     };
   }, []);
 
-  // Quill editor modules configuration
-  const modules = useMemo(() => ({
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        ['blockquote'],
-        ['link', 'image'],
-        ['clean']
-      ],
-      handlers: {
-        image: handleImageUpload
-      }
-    },
-  }), [handleImageUpload]);
-
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'blockquote',
-    'link',
-    'image'
-  ];
+  const modules = useMemo(
+    () => buildQuillModules(handleImageUpload),
+    [handleImageUpload]
+  );
 
   useEffect(() => {
-    // Check if user is logged in and is admin
+    ensureGoogleFontsLoaded();
+  }, []);
+
+  useEffect(() => {
+    if (loading) return undefined;
+
+    const timer = window.setTimeout(() => {
+      const quill = quillRef.current?.getEditor();
+      if (!quill) return;
+      setupQuillToolbar(quill);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [loading, isEditMode]);
+
+  useEffect(() => {
     const currentUser = user || getUser();
     if (!currentUser || !currentUser.is_admin) {
       navigate('/subscribe?mode=login', { replace: true });
       return;
     }
 
-    // If editing, load the post data
     if (isEditMode) {
       const fetchPost = async () => {
         setLoading(true);
@@ -104,9 +100,8 @@ export const AdminPostEditorPage = ({ user }) => {
           const post = await postsAPI.getOne(postId);
           setFormData({
             title: post.title,
-            excerpt: post.excerpt,
-            content: post.content,
-            is_premium: post.is_premium
+            content: getInitialEditorContent(post.excerpt, post.content),
+            is_premium: post.is_premium,
           });
         } catch (err) {
           console.error('Error fetching post:', err);
@@ -121,19 +116,19 @@ export const AdminPostEditorPage = ({ user }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }));
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
   const handleContentChange = (value) => {
-    setFormData(prev => ({ ...prev, content: value }));
+    setFormData((prev) => ({ ...prev, content: value }));
     if (errors.content) {
-      setErrors(prev => ({ ...prev, content: '' }));
+      setErrors((prev) => ({ ...prev, content: '' }));
     }
   };
 
@@ -142,10 +137,6 @@ export const AdminPostEditorPage = ({ user }) => {
     if (!formData.title.trim()) {
       newErrors.title = 'Title is required';
     }
-    if (!formData.excerpt.trim()) {
-      newErrors.excerpt = 'Excerpt is required';
-    }
-    // Strip HTML tags to check if content is empty
     const strippedContent = formData.content.replace(/<[^>]*>/g, '').trim();
     if (!strippedContent) {
       newErrors.content = 'Content is required';
@@ -156,22 +147,29 @@ export const AdminPostEditorPage = ({ user }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setSubmitting(true);
 
+    const payload = {
+      title: formData.title,
+      content: formData.content,
+      excerpt: generateExcerpt(formData.content),
+      is_premium: formData.is_premium,
+    };
+
     try {
       if (isEditMode) {
-        await postsAPI.update(postId, formData);
+        await postsAPI.update(postId, payload);
       } else {
-        await postsAPI.create(formData);
+        await postsAPI.create(payload);
       }
       navigate('/admin/dashboard');
     } catch (err) {
-      alert('Failed to save post: ' + err.message);
+      alert(`Failed to save post: ${err.message}`);
     } finally {
       setSubmitting(false);
     }
@@ -180,11 +178,12 @@ export const AdminPostEditorPage = ({ user }) => {
   if (loading) {
     return (
       <div className="min-h-screen bg-off-white relative">
-        <div 
+        <div
           className="fixed inset-0 pointer-events-none z-0 opacity-[0.025] mix-blend-multiply"
           style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)',
-            backgroundSize: '20px 20px'
+            backgroundImage:
+              'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)',
+            backgroundSize: '20px 20px',
           }}
         />
         <div className="relative z-10">
@@ -198,27 +197,28 @@ export const AdminPostEditorPage = ({ user }) => {
 
   return (
     <div className="min-h-screen bg-off-white relative" data-testid="admin-post-editor">
-      <div 
+      <div
         className="fixed inset-0 pointer-events-none z-0 opacity-[0.025] mix-blend-multiply"
         style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)',
-          backgroundSize: '20px 20px'
+          backgroundImage:
+            'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)',
+          backgroundSize: '20px 20px',
         }}
       />
       <div className="relative z-10">
         <div className="max-w-4xl mx-auto px-6 md:px-8 lg:px-12 py-12 md:py-16">
           <Link to="/" className="flex justify-center mb-8">
-            <img 
-              src="/Logo.png" 
-              alt="Faith by Experiments" 
+            <img
+              src="/Logo.png"
+              alt="Faith by Experiments"
               className="h-20 md:h-28 lg:h-36"
             />
           </Link>
 
           <div className="max-w-2xl mx-auto space-y-12 md:space-y-16">
             <div className="space-y-6">
-              <Link 
-                to="/admin/dashboard" 
+              <Link
+                to="/admin/dashboard"
                 className="inline-flex items-center gap-2 text-warm-black/60 hover:text-warm-black font-sans text-sm md:text-base transition-colors"
               >
                 <ArrowLeft size={20} />
@@ -231,7 +231,12 @@ export const AdminPostEditorPage = ({ user }) => {
 
             <form onSubmit={handleSubmit} className="space-y-8" data-testid="post-editor-form">
               <div className="space-y-2">
-                <label htmlFor="title" className="block font-sans font-medium text-base text-warm-black">Post Title *</label>
+                <label
+                  htmlFor="title"
+                  className="block font-sans font-medium text-base text-warm-black"
+                >
+                  Post Title *
+                </label>
                 <input
                   type="text"
                   id="title"
@@ -250,37 +255,29 @@ export const AdminPostEditorPage = ({ user }) => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="excerpt" className="block font-sans font-medium text-base text-warm-black">Excerpt / Short Description *</label>
-                <textarea
-                  id="excerpt"
-                  name="excerpt"
-                  value={formData.excerpt}
-                  onChange={handleChange}
-                  rows="3"
-                  className={`w-full px-4 py-3 border rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted resize-y ${
-                    errors.excerpt ? 'border-red-300' : 'border-black/20'
+                <label
+                  htmlFor="content"
+                  className="block font-sans font-medium text-base text-warm-black"
+                >
+                  Content *
+                </label>
+                <p className="font-sans text-sm text-warm-black/60">
+                  Write and format your post — change font, size, colors, add images, and more.
+                </p>
+                <div
+                  className={`post-content-editor bg-white rounded ${
+                    errors.content ? 'border-2 border-red-300' : ''
                   }`}
-                  placeholder="Brief description that appears in listings"
-                  data-testid="post-excerpt-input"
-                />
-                {errors.excerpt && (
-                  <span className="block font-sans text-sm text-red-600 mt-1">{errors.excerpt}</span>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="content" className="block font-sans font-medium text-base text-warm-black">Full Content *</label>
-                <div className={errors.content ? 'border-2 border-red-300 rounded' : ''}>
+                >
                   <ReactQuill
                     ref={quillRef}
                     theme="snow"
                     value={formData.content}
                     onChange={handleContentChange}
                     modules={modules}
-                    formats={formats}
-                    placeholder="Write your full post content here..."
+                    formats={QUILL_FORMATS}
+                    placeholder="Start writing your post..."
                     data-testid="post-content-editor"
-                    className="bg-white"
                   />
                 </div>
                 {errors.content && (
@@ -298,25 +295,29 @@ export const AdminPostEditorPage = ({ user }) => {
                     className="w-5 h-5 text-accent-muted border-black/20 rounded focus:ring-accent-muted focus:ring-2"
                     data-testid="post-premium-checkbox"
                   />
-                  <span className="font-sans text-base text-warm-black">Premium Content (requires subscription)</span>
+                  <span className="font-sans text-base text-warm-black">
+                    Premium Content (requires subscription)
+                  </span>
                 </label>
               </div>
 
               <div className="flex items-center justify-end gap-4 pt-6 border-t border-black/10">
-                <Link 
-                  to="/admin/dashboard" 
+                <Link
+                  to="/admin/dashboard"
                   className="font-sans font-medium text-base text-warm-black/70 hover:text-warm-black transition-colors"
                 >
                   Cancel
                 </Link>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="inline-flex items-center justify-center gap-2 bg-accent-muted hover:bg-accent-muted/90 text-white font-sans font-semibold text-base md:text-lg px-6 py-3 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={submitting}
                   data-testid="post-submit-btn"
                 >
                   <Save size={20} />
-                  <span>{submitting ? 'Saving...' : (isEditMode ? 'Update Post' : 'Publish Post')}</span>
+                  <span>
+                    {submitting ? 'Saving...' : isEditMode ? 'Update Post' : 'Publish Post'}
+                  </span>
                 </button>
               </div>
             </form>
