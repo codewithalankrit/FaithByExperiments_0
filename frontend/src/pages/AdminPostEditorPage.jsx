@@ -29,7 +29,6 @@ export const AdminPostEditorPage = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const quillRef = useRef(null);
-  const titleQuillRef = useRef(null);
 
   const handleImageUpload = useCallback(() => {
     const input = document.createElement('input');
@@ -71,11 +70,6 @@ export const AdminPostEditorPage = ({ user }) => {
     [handleImageUpload]
   );
 
-  const titleModules = useMemo(
-    () => buildQuillModules(null),
-    []
-  );
-
   useEffect(() => {
     ensureGoogleFontsLoaded();
   }, []);
@@ -87,11 +81,6 @@ export const AdminPostEditorPage = ({ user }) => {
       const quill = quillRef.current?.getEditor();
       if (!quill) return;
       setupQuillToolbar(quill);
-
-      const titleQuill = titleQuillRef.current?.getEditor();
-      if (titleQuill) {
-        setupQuillToolbar(titleQuill);
-      }
     }, 0);
 
     return () => window.clearTimeout(timer);
@@ -136,13 +125,6 @@ export const AdminPostEditorPage = ({ user }) => {
     }
   };
 
-  const handleTitleChange = (value) => {
-    setFormData((prev) => ({ ...prev, title: value }));
-    if (errors.title) {
-      setErrors((prev) => ({ ...prev, title: '' }));
-    }
-  };
-
   const handleContentChange = (value) => {
     setFormData((prev) => ({ ...prev, content: value }));
     if (errors.content) {
@@ -152,8 +134,7 @@ export const AdminPostEditorPage = ({ user }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    const strippedTitle = formData.title.replace(/<[^>]*>/g, '').trim();
-    if (!strippedTitle) {
+    if (!formData.title.trim()) {
       newErrors.title = 'Title is required';
     }
     const strippedContent = formData.content.replace(/<[^>]*>/g, '').trim();
@@ -174,7 +155,7 @@ export const AdminPostEditorPage = ({ user }) => {
     setSubmitting(true);
 
     const payload = {
-      title: formData.title.replace(/<[^>]*>/g, '').trim(),
+      title: formData.title,
       content: formData.content,
       excerpt: generateExcerpt(formData.content),
       is_premium: formData.is_premium,
@@ -256,25 +237,18 @@ export const AdminPostEditorPage = ({ user }) => {
                 >
                   Post Title *
                 </label>
-                <p className="font-sans text-sm text-warm-black/60">
-                  Format your title — change font, size, colors, and more.
-                </p>
-                <div
-                  className={`post-title-editor bg-white rounded ${
-                    errors.title ? 'border-2 border-red-300' : ''
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 border rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted ${
+                    errors.title ? 'border-red-300' : 'border-black/20'
                   }`}
-                >
-                  <ReactQuill
-                    ref={titleQuillRef}
-                    theme="snow"
-                    value={formData.title}
-                    onChange={handleTitleChange}
-                    modules={titleModules}
-                    formats={QUILL_FORMATS}
-                    placeholder="Enter post title..."
-                    data-testid="post-title-editor"
-                  />
-                </div>
+                  placeholder="Enter post title"
+                  data-testid="post-title-input"
+                />
                 {errors.title && (
                   <span className="block font-sans text-sm text-red-600 mt-1">{errors.title}</span>
                 )}
