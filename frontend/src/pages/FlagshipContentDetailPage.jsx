@@ -4,6 +4,7 @@ import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { postsAPI } from "../services/api";
 import { ArrowLeft } from "lucide-react";
+import { sanitizeQuillHtmlForDisplay } from "../utils/quillConfig";
 
 export const FlagshipContentDetailPage = ({
   isLoggedIn,
@@ -147,38 +148,26 @@ export const FlagshipContentDetailPage = ({
               <div className="space-y-8 md:space-y-12">
                 {showFullContent ? (
                   <div
-                    className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed prose prose-lg max-w-none overflow-wrap-break-word"
-                    style={{
-                      overflowWrap: "break-word",
-                      wordWrap: "break-word",
-                    }}
+                    className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed prose prose-lg max-w-none"
                     data-testid="full-content"
-                    dangerouslySetInnerHTML={{ __html: content.fullContent }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeQuillHtmlForDisplay(content.fullContent) }}
                   />
                 ) : (
                   <>
                     {/* Preview content - shown clearly */}
                     <div
-                      className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed prose prose-lg max-w-none overflow-wrap-break-word"
-                      style={{
-                        overflowWrap: "break-word",
-                        wordWrap: "break-word",
-                      }}
+                      className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed prose prose-lg max-w-none"
                       data-testid="preview-content"
                       dangerouslySetInnerHTML={{
-                        __html: content.previewContent,
+                        __html: sanitizeQuillHtmlForDisplay(content.previewContent),
                       }}
                     />
 
                     {/* Blurred remaining content section */}
                     <div className="relative">
                       <div
-                        className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed prose prose-lg max-w-none blur-sm select-none pointer-events-none overflow-wrap-break-word"
-                        style={{
-                          minHeight: "400px",
-                          overflowWrap: "break-word",
-                          wordWrap: "break-word",
-                        }}
+                        className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed prose prose-lg max-w-none blur-sm select-none pointer-events-none"
+                        style={{ minHeight: "400px" }}
                       >
                         <p className="text-warm-black/60">
                           This content continues with additional frameworks,

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, LogOut } from 'lucide-react';
 import { postsAPI, authAPI, getUser } from '../services/api';
+import { normalizePlainText } from '../utils/quillConfig';
 
 export const AdminDashboardPage = ({ user, onAdminLogout }) => {
   const [posts, setPosts] = useState([]);
@@ -170,8 +171,8 @@ export const AdminDashboardPage = ({ user, onAdminLogout }) => {
                         </button>
                       </div>
                     </div>
-                    <p className="font-sans text-base text-warm-black/70 leading-relaxed line-clamp-3">
-                      {post.excerpt}
+                    <p className="font-sans text-base text-warm-black/70 leading-relaxed line-clamp-3 break-words">
+                      {normalizePlainText(post.excerpt)}
                     </p>
                     <div className="pt-4 border-t border-black/10">
                       <span className="font-sans text-sm text-warm-black/50">

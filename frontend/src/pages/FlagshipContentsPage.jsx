@@ -5,6 +5,7 @@ import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { postsAPI } from '../services/api';
 import { FlagshipContentsSEO } from '../components/SEO';
+import { normalizePlainText } from '../utils/quillConfig';
 
 export const FlagshipContentsPage = ({ isLoggedIn, isSubscribed, isAdmin, onLogout }) => {
   const [contentItems, setContentItems] = useState([]);
@@ -107,9 +108,11 @@ export const FlagshipContentsPage = ({ isLoggedIn, isSubscribed, isAdmin, onLogo
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
               {contentItems.map((item) => (
-                <div key={item.id} className="bg-white border border-black/10 p-6 md:p-8 space-y-4" data-testid={`post-card-${item.id}`}>
+                <div key={item.id} className="bg-white border border-black/10 p-6 md:p-8 space-y-4 overflow-hidden" data-testid={`post-card-${item.id}`}>
                   <h3 className="font-serif font-semibold text-xl md:text-2xl text-warm-black leading-tight">{item.title}</h3>
-                  <p className="font-sans text-base text-warm-black/70 leading-relaxed">{item.excerpt}</p>
+                  <p className="font-sans text-base text-warm-black/70 leading-relaxed break-words">
+                    {normalizePlainText(item.excerpt)}
+                  </p>
                   <Link 
                     to={`/flagship-contents/${item.id}`}
                     className="inline-flex items-center gap-2 text-sage hover:text-sage/80 font-sans font-semibold text-base transition-colors"

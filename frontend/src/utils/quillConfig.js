@@ -178,11 +178,29 @@ export const buildQuillModules = (imageHandler) => ({
   },
 });
 
-export const generateExcerpt = (html, maxLength = 200) => {
-  const text = html
+export const sanitizeQuillHtmlForDisplay = (html) => {
+  if (!html) return '';
+  return html.replace(/&nbsp;/gi, ' ');
+};
+
+export const normalizePlainText = (value) => {
+  if (!value) return '';
+
+  return value
     .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
     .replace(/\s+/g, ' ')
     .trim();
+};
+
+export const generateExcerpt = (html, maxLength = 200) => {
+  const text = normalizePlainText(html);
   if (!text) return '';
   if (text.length <= maxLength) return text;
   return `${text.slice(0, maxLength).trim()}...`;

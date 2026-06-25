@@ -13,8 +13,8 @@ h4,
 h5,
 h6,
 p {
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 /* Ensure long text in content boxes wraps instead of overflowing */
@@ -30,8 +30,8 @@ h4,
 h5,
 h6,
 p {
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 .App {
   /* Ensure long text in content boxes wraps instead of overflowing */
@@ -47,8 +47,8 @@ p {
   h5,
   h6,
   p {
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-wrap: normal;
   }
   min-height: 100vh;
 
@@ -65,8 +65,8 @@ p {
   h5,
   h6,
   p {
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-wrap: normal;
   }
   background: var(--bg-page);
 
@@ -83,8 +83,8 @@ p {
   h5,
   h6,
   p {
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-wrap: normal;
   }
 }
 
@@ -101,8 +101,8 @@ h4,
 h5,
 h6,
 p {
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 /* Ensure long text in content boxes wraps instead of overflowing */
@@ -118,8 +118,8 @@ h4,
 h5,
 h6,
 p {
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 /* Hide Emergent badge */
 
@@ -136,22 +136,22 @@ h4,
 h5,
 h6,
 p {
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 #emergent-badge,
 
 /* Ensure long text in content boxes wraps instead of overflowing */
 .content-box, .main-content, .post-content, .article-content, .text-container, h1, h2, h3, h4, h5, h6, p {
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 [id*="emergent"],
 
 /* Ensure long text in content boxes wraps instead of overflowing */
 .content-box, .main-content, .post-content, .article-content, .text-container, h1, h2, h3, h4, h5, h6, p {
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 [class*="emergent-badge"] {
   /* Ensure long text in content boxes wraps instead of overflowing */
@@ -167,8 +167,8 @@ p {
   h5,
   h6,
   p {
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-wrap: normal;
   }
   display: none !important;
 
@@ -185,8 +185,8 @@ p {
   h5,
   h6,
   p {
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-wrap: normal;
   }
   visibility: hidden !important;
 
@@ -203,8 +203,8 @@ p {
   h5,
   h6,
   p {
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-wrap: normal;
   }
   opacity: 0 !important;
 
@@ -221,8 +221,8 @@ p {
   h5,
   h6,
   p {
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-wrap: normal;
   }
 }
 
@@ -239,6 +239,6 @@ h4,
 h5,
 h6,
 p {
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: normal;
 }

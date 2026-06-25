@@ -100,14 +100,21 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Proper word wrapping to prevent words from being cut off */
+/* Proper word wrapping — keep whole words on the same line when possible */
 .prose,
 .prose p,
 .prose div,
-.prose * {
-  word-break: break-word !important;
-  overflow-wrap: break-word !important;
-  word-wrap: break-word !important;
+.prose li,
+.prose blockquote,
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  word-wrap: normal !important;
   hyphens: none !important;
   white-space: normal !important;
   max-width: 100% !important;
