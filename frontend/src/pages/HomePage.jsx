@@ -26,6 +26,7 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, user, onLogout }) 
         const posts = await postsAPI.getAll(`?_t=${Date.now()}`);
         if (posts.length > 0) {
           setFlagshipPreviewPost({
+            id: posts[0].id,
             title: posts[0].title,
             content: posts[0].preview_content
           });
@@ -165,7 +166,7 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, user, onLogout }) 
         {/* Manifesto */}
         <section id="manifesto" className="py-20 md:py-24 space-y-20 border-b border-black/10">
           <div className="max-w-4xl mx-auto px-6 md:px-8 lg:px-12">
-            <h2 className="font-serif font-bold text-4xl md:text-5xl text-warm-black leading-tight text-center mb-16 md:mb-20">
+            <h2 className="font-serif font-semibold text-3xl md:text-4xl text-warm-black leading-tight text-center mb-16 md:mb-20">
               {siteContent.manifesto.title}
             </h2>
             <div className="space-y-16 md:space-y-20">
@@ -231,8 +232,8 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, user, onLogout }) 
             </div>
             
             <div className="text-center">
-              <Link 
-                to={isSubscribed ? "/flagship-contents" : "/subscribe"} 
+              <Link
+                to={isSubscribed && flagshipPreviewPost ? `/flagship-contents/${flagshipPreviewPost.id}` : "/subscribe"}
                       className="inline-block font-sans font-semibold text-base md:text-lg text-white bg-accent-muted hover:bg-accent-muted/90 px-8 py-4 rounded transition-colors"
                 data-testid="flagship-cta"
               >

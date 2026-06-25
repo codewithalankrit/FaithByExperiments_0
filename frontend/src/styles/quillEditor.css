@@ -23,6 +23,15 @@
   margin-bottom: 1.5em;
 }
 
+.post-title-editor .ql-editor {
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+.post-title-editor .ql-editor p {
+  margin-bottom: 0;
+}
+
 .post-content-editor .ql-editor img {
   max-width: 100%;
   height: auto;

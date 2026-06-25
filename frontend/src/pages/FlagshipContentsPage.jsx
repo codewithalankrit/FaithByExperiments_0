@@ -87,7 +87,7 @@ export const FlagshipContentsPage = ({ isLoggedIn, isSubscribed, isAdmin, onLogo
             </Link>
             
             <div className="mb-12 space-y-4">
-              <h1 className="font-serif font-bold text-4xl md:text-5xl text-warm-black leading-tight">Flagship Contents</h1>
+              <h1 className="font-serif font-bold text-3xl md:text-4xl text-warm-black leading-tight">Flagship Contents</h1>
               <p className="font-sans text-lg md:text-xl text-warm-black/70 leading-relaxed max-w-3xl">
                 Structured experiments, frameworks, and observations designed for those who treat faith as a hypothesis worth testing.
               </p>
