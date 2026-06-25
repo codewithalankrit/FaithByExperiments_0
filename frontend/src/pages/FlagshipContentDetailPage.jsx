@@ -20,7 +20,8 @@ export const FlagshipContentDetailPage = ({
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const post = await postsAPI.getOne(contentId);
+        // Add cache-busting timestamp to ensure fresh content
+        const post = await postsAPI.getOne(`${contentId}?_t=${Date.now()}`);
         setContent({
           id: post.id,
           title: post.title,

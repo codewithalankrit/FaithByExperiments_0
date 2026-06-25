@@ -23,7 +23,8 @@ export const AdminDashboardPage = ({ user, onAdminLogout }) => {
     // Load posts from API
     const fetchPosts = async () => {
       try {
-        const fetchedPosts = await postsAPI.getAll();
+        // Add cache-busting timestamp to ensure fresh content
+        const fetchedPosts = await postsAPI.getAll(`?_t=${Date.now()}`);
         setPosts(fetchedPosts);
       } catch (err) {
         setError('Failed to load posts');
@@ -171,7 +172,7 @@ export const AdminDashboardPage = ({ user, onAdminLogout }) => {
                         </button>
                       </div>
                     </div>
-                    <p className="font-sans text-base text-warm-black/70 leading-relaxed line-clamp-3 break-words">
+                    <p className="font-sans text-base text-warm-black/70 leading-relaxed line-clamp-3 break-words whitespace-pre-line">
                       {normalizePlainText(post.excerpt)}
                     </p>
                     <div className="pt-4 border-t border-black/10">

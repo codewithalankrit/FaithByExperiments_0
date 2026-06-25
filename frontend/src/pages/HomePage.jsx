@@ -5,6 +5,7 @@ import { siteContent } from '../data/content';
 import { postsAPI } from '../services/api';
 import { HomePageSEO } from '../components/SEO';
 import { Link } from 'react-router-dom';
+import { sanitizeQuillHtmlForDisplay } from '../utils/quillConfig';
 
 const formatSubscriptionEndDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('en-IN', {
@@ -21,7 +22,8 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, user, onLogout }) 
     // Load the first post from API for the preview section
     const fetchFirstPost = async () => {
       try {
-        const posts = await postsAPI.getAll();
+        // Add cache-busting timestamp to ensure fresh content
+        const posts = await postsAPI.getAll(`?_t=${Date.now()}`);
         if (posts.length > 0) {
           setFlagshipPreviewPost({
             title: posts[0].title,
@@ -32,22 +34,13 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, user, onLogout }) 
         console.error('Error fetching flagship preview:', err);
       }
     };
-    
+
     fetchFirstPost();
   }, []);
 
-  // Helper to strip HTML tags for preview
-  const stripHtml = (html) => {
-    if (!html) return '';
-    return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
-  };
-
   // Get preview content - from API post or fallback to static content
-  const previewContent = flagshipPreviewPost 
-    ? (() => {
-        const stripped = stripHtml(flagshipPreviewPost.content);
-        return stripped.length > 500 ? stripped.substring(0, 500) + '...' : stripped;
-      })()
+  const previewContent = flagshipPreviewPost
+    ? sanitizeQuillHtmlForDisplay(flagshipPreviewPost.content)
     : siteContent.flagshipPreview.previewContent;
 
   const subscriptionExpiryDate = user?.subscription_end_at

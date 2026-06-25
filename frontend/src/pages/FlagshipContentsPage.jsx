@@ -15,7 +15,8 @@ export const FlagshipContentsPage = ({ isLoggedIn, isSubscribed, isAdmin, onLogo
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const posts = await postsAPI.getAll();
+        // Add cache-busting timestamp to ensure fresh content
+        const posts = await postsAPI.getAll(`?_t=${Date.now()}`);
         // Transform API response to match component expectations
         const formattedPosts = posts.map(post => ({
           id: post.id,
@@ -110,7 +111,7 @@ export const FlagshipContentsPage = ({ isLoggedIn, isSubscribed, isAdmin, onLogo
               {contentItems.map((item) => (
                 <div key={item.id} className="bg-white border border-black/10 p-6 md:p-8 space-y-4 overflow-hidden" data-testid={`post-card-${item.id}`}>
                   <h3 className="font-serif font-semibold text-xl md:text-2xl text-warm-black leading-tight">{item.title}</h3>
-                  <p className="font-sans text-base text-warm-black/70 leading-relaxed break-words">
+                  <p className="font-sans text-base text-warm-black/70 leading-relaxed break-words whitespace-pre-line">
                     {normalizePlainText(item.excerpt)}
                   </p>
                   <Link 
