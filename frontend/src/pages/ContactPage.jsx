@@ -4,8 +4,14 @@ import { Footer } from '../components/Footer';
 import { ContactSEO } from '../components/SEO';
 import { getUser } from '../services/api';
 import { siteContent } from '../data/content';
+import emailjs from '@emailjs/browser';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL;
+// Initialize EmailJS with public key
+emailjs.init(process.env.REACT_APP_EMAILJS_PUBLIC_KEY);
+
+// EmailJS Configuration
+const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
 
 export const ContactPage = () => {
   const user = getUser();
@@ -13,7 +19,9 @@ export const ContactPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    whatsapp: '',
+    phone: '',
+    country: '',
+    subject: '',
     message: ''
   });
   const [loading, setLoading] = useState(false);
@@ -32,22 +40,24 @@ export const ContactPage = () => {
     setError('');
 
     try {
-      const response = await fetch(`${API_URL}/api/contact/send`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          whatsapp: formData.whatsapp || null,
-          message: formData.message
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || 'Failed to send inquiry');
+      if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+        throw new Error('EmailJS is not configured. Please contact the administrator.');
       }
+
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone,
+        country: formData.country,
+        subject: formData.subject,
+        message: formData.message
+      };
+
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams
+      );
 
       setSubmitted(true);
     } catch (err) {
@@ -139,18 +149,47 @@ export const ContactPage = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <label htmlFor="whatsapp" className="block font-sans font-medium text-base text-warm-black">WhatsApp Number (Optional)</label>
+                  <label htmlFor="phone" className="block font-sans font-medium text-base text-warm-black">Phone Number (Optional)</label>
                   <input
                     type="tel"
-                    id="whatsapp"
-                    name="whatsapp"
-                    value={formData.whatsapp}
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                     placeholder="+91 98765 43210"
-                    data-testid="contact-whatsapp-input"
+                    data-testid="contact-phone-input"
                   />
                   <span className="font-sans text-sm text-warm-black/50">Include country code for international numbers</span>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="country" className="block font-sans font-medium text-base text-warm-black">Country (Optional)</label>
+                  <input
+                    type="text"
+                    id="country"
+                    name="country"
+                    value={formData.country}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
+                    placeholder="India"
+                    data-testid="contact-country-input"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="subject" className="block font-sans font-medium text-base text-warm-black">Subject *</label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
+                    placeholder="Inquiry about in-person meetings"
+                    data-testid="contact-subject-input"
+                  />
                 </div>
                 
                 <div className="space-y-2">

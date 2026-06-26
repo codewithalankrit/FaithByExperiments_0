@@ -157,6 +157,14 @@ export const SubscribePage = ({ onLogin }) => {
             theme: {
               color: "#4A5568",
             },
+            method: {
+              netbanking: true,
+              card: true,
+              upi: true,
+              wallet: false,
+              emi: false,
+              paylater: false,
+            },
             modal: {
               ondismiss: function () {
                 setLoading(false);

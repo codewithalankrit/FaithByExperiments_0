@@ -139,7 +139,7 @@ export const FlagshipContentDetailPage = ({
             <article className="space-y-8 md:space-y-12">
               <header>
                 <h1
-                  className="font-serif font-bold text-2xl md:text-3xl lg:text-4xl text-warm-black leading-tight"
+                  className="font-serif font-bold text-xl md:text-2xl lg:text-3xl text-warm-black leading-tight"
                   data-testid="post-title"
                 >
                   {content.title}

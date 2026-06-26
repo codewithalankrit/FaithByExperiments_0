@@ -26,7 +26,6 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, user, onLogout }) 
         const posts = await postsAPI.getAll(`?_t=${Date.now()}`);
         if (posts.length > 0) {
           setFlagshipPreviewPost({
-            id: posts[0].id,
             title: posts[0].title,
             content: posts[0].preview_content
           });
@@ -233,7 +232,7 @@ export const HomePage = ({ isLoggedIn, isSubscribed, isAdmin, user, onLogout }) 
             
             <div className="text-center">
               <Link
-                to={isSubscribed && flagshipPreviewPost ? `/flagship-contents/${flagshipPreviewPost.id}` : "/subscribe"}
+                to={isSubscribed ? "/flagship-contents" : "/subscribe"}
                       className="inline-block font-sans font-semibold text-base md:text-lg text-white bg-accent-muted hover:bg-accent-muted/90 px-8 py-4 rounded transition-colors"
                 data-testid="flagship-cta"
               >
