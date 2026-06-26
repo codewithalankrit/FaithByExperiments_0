@@ -20,7 +20,6 @@ export const ContactPage = () => {
     name: '',
     email: '',
     phone: '',
-    country: '',
     subject: '',
     message: ''
   });
@@ -40,7 +39,7 @@ export const ContactPage = () => {
     setError('');
 
     try {
-      if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+      if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID) {
         throw new Error('EmailJS is not configured. Please contact the administrator.');
       }
 
@@ -48,7 +47,6 @@ export const ContactPage = () => {
         from_name: formData.name,
         from_email: formData.email,
         phone: formData.phone,
-        country: formData.country,
         subject: formData.subject,
         message: formData.message
       };
@@ -161,20 +159,6 @@ export const ContactPage = () => {
                     data-testid="contact-phone-input"
                   />
                   <span className="font-sans text-sm text-warm-black/50">Include country code for international numbers</span>
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="country" className="block font-sans font-medium text-base text-warm-black">Country (Optional)</label>
-                  <input
-                    type="text"
-                    id="country"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
-                    placeholder="India"
-                    data-testid="contact-country-input"
-                  />
                 </div>
 
                 <div className="space-y-2">
