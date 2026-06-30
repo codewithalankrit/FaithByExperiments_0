@@ -34,32 +34,35 @@ const authHeaders = () => {
 };
 
 // API request wrapper
+const DEFAULT_TIMEOUT_MS = 10000;
+const PAYMENT_TIMEOUT_MS = 60000;
+
 const apiRequest = async (endpoint, options = {}) => {
   if (!API_URL) {
     console.error('API_URL is undefined. REACT_APP_BACKEND_URL not loaded from .env file.');
     throw new Error('Backend URL not configured. Please set REACT_APP_BACKEND_URL in your .env file and restart the dev server.');
   }
   
+  const { timeoutMs = DEFAULT_TIMEOUT_MS, ...fetchOptions } = options;
   const url = `${API_URL}/api${endpoint}`;
   console.log('Making API request to:', url);
   
   const config = {
-    ...options,
+    ...fetchOptions,
     headers: {
       'Content-Type': 'application/json',
       ...authHeaders(),
-      ...options.headers,
+      ...fetchOptions.headers,
     },
   };
 
   try {
-    // Add timeout to prevent hanging
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
     
     const response = await fetch(url, {
       ...config,
-      credentials: "include", // Required for cookies/session
+      credentials: "include",
       signal: controller.signal
     });
     
@@ -74,9 +77,13 @@ const apiRequest = async (endpoint, options = {}) => {
     return response.json();
   } catch (err) {
     console.error('API request failed:', err);
-    // Handle network errors (Failed to fetch)
     if (err.name === 'AbortError') {
-      throw new Error('Request timed out. Please check if the backend server is running.');
+      const isPayment = endpoint.startsWith('/payments/');
+      throw new Error(
+        isPayment
+          ? 'Payment activation is taking longer than expected. If money was deducted, wait a minute and try signing in — your subscription may already be active.'
+          : 'Request timed out. Please check if the backend server is running.'
+      );
     }
     if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
       throw new Error(`Cannot connect to backend at ${API_URL}. Make sure the backend server is running.`);
@@ -191,16 +198,17 @@ export const uploadImage = async (file) => {
   return `${API_URL}${data.url}`;
 };
 
-// Payments API
+// Payments API — use extended timeout for Render cold starts
 export const paymentsAPI = {
   getConfig: async () => {
-    return apiRequest('/payments/config');
+    return apiRequest('/payments/config', { timeoutMs: PAYMENT_TIMEOUT_MS });
   },
 
   createOrder: async (planId) => {
     return apiRequest('/payments/create-order', {
       method: 'POST',
       body: JSON.stringify({ plan_id: planId }),
+      timeoutMs: PAYMENT_TIMEOUT_MS,
     });
   },
 
@@ -214,6 +222,7 @@ export const paymentsAPI = {
         password: password,
         mobile: mobile || null
       }),
+      timeoutMs: PAYMENT_TIMEOUT_MS,
     });
   },
 
@@ -225,6 +234,7 @@ export const paymentsAPI = {
         razorpay_payment_id: paymentId,
         razorpay_signature: signature,
       }),
+      timeoutMs: PAYMENT_TIMEOUT_MS,
     });
   },
 };

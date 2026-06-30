@@ -110,6 +110,8 @@ export const SubscribePage = ({ onLogin }) => {
             order_id: orderData.order_id,
             handler: async function (response) {
               try {
+                setError("");
+                setLoading(true);
                 // Step 4: Verify payment and create account
                 const verifyResult = await paymentsAPI.verifyPayment(
                   response.razorpay_order_id,
@@ -144,7 +146,7 @@ export const SubscribePage = ({ onLogin }) => {
               } catch (err) {
                 setError(
                   err.message ||
-                    "Payment verification failed. If money was deducted, please contact support with your payment ID.",
+                    "Payment verification failed. If money was deducted, wait a minute and try signing in with your email and password.",
                 );
                 setLoading(false);
               }
