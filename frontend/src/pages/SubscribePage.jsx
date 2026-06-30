@@ -108,6 +108,7 @@ export const SubscribePage = ({ onLogin }) => {
             name: "Faith by Experiments",
             description: `Subscription: ${orderData.plan_name}`,
             order_id: orderData.order_id,
+            webview_intent: true,
             handler: async function (response) {
               try {
                 setError("");
@@ -166,6 +167,25 @@ export const SubscribePage = ({ onLogin }) => {
               wallet: false,
               emi: false,
               paylater: false,
+            },
+            config: {
+              display: {
+                blocks: {
+                  banks: {
+                    name: "Pay using UPI",
+                    instruments: [
+                      {
+                        method: "upi",
+                        flows: ["intent", "qr"],
+                      },
+                    ],
+                  },
+                },
+                sequence: ["block.banks", "card", "netbanking"],
+                preferences: {
+                  show_default_blocks: false,
+                },
+              },
             },
             modal: {
               ondismiss: function () {
