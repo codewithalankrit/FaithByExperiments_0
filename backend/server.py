@@ -12,7 +12,7 @@ load_dotenv(ROOT_DIR / '.env')
 # MongoDB connection
 uri = os.getenv("MONGODB_URI")
 client = AsyncIOMotorClient(uri)
-db = client[os.getenv("DB_NAME", "faith_db")]
+db = client[os.getenv("DB_NAME", "faith_by_experiments")]
 
 # Create the main app
 app = FastAPI(title="Faith by Experiments API")
@@ -224,6 +224,8 @@ async def startup_event():
     await db.users.create_index("id", unique=True)
     await db.posts.create_index("id", unique=True)
     await db.posts.create_index("slug", unique=True)
+    await db.orders.create_index("razorpay_order_id", unique=True, sparse=True)
+    await db.orders.create_index("id", unique=True)
     logger.info("Database indexes created")
 
 

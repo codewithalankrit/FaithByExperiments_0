@@ -144,7 +144,7 @@ export const SubscribePage = ({ onLogin }) => {
               } catch (err) {
                 setError(
                   err.message ||
-                    "Payment verification failed. Please contact support.",
+                    "Payment verification failed. If money was deducted, please contact support with your payment ID.",
                 );
                 setLoading(false);
               }

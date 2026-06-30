@@ -266,7 +266,9 @@ async def verify_payment(
             'razorpay_signature': request.razorpay_signature
         }
         
+        print(f"Verifying payment: {request.razorpay_payment_id} for order: {request.razorpay_order_id}")
         razorpay_client.utility.verify_payment_signature(params_dict)
+        print("Signature verified successfully")
         
         # Get order from database
         order = await db.orders.find_one(
@@ -275,6 +277,7 @@ async def verify_payment(
         )
         
         if not order:
+            print(f"Order not found in database: {request.razorpay_order_id}")
             raise HTTPException(status_code=404, detail="Order not found")
         
         # Check if this is a pending signup (new user registration)
@@ -425,6 +428,8 @@ async def verify_payment(
             }
         
     except Exception as e:
+        print(f"Payment verification error: {str(e)}")
+        print(f"Error type: {type(e).__name__}")
         if razorpay and isinstance(e, razorpay.errors.SignatureVerificationError):
             raise HTTPException(status_code=400, detail="Invalid payment signature")
         if isinstance(e, HTTPException):
