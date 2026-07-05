@@ -42,7 +42,7 @@ export const Header = ({ isLoggedIn, isAdmin, onLogout }) => {
       const rect = dropdownContainerRef.current.getBoundingClientRect();
       setDropdownPosition({
         top: rect.bottom + 2,
-        right: window.innerWidth - rect.right
+        left: rect.left
       });
     }
     setIsAdminDropdownOpen(true);
@@ -51,7 +51,7 @@ export const Header = ({ isLoggedIn, isAdmin, onLogout }) => {
   const handleDropdownLeave = () => {
     const timeout = setTimeout(() => {
       setIsAdminDropdownOpen(false);
-    }, 150); // Small delay to allow moving mouse to dropdown
+    }, 400); // Increased delay to allow moving mouse to dropdown
     setDropdownTimeout(timeout);
   };
 
@@ -69,7 +69,7 @@ export const Header = ({ isLoggedIn, isAdmin, onLogout }) => {
         const rect = dropdownContainerRef.current.getBoundingClientRect();
         setDropdownPosition({
           top: rect.bottom + 2,
-          right: window.innerWidth - rect.right
+          left: rect.left
         });
       }
     };
@@ -145,7 +145,7 @@ export const Header = ({ isLoggedIn, isAdmin, onLogout }) => {
           style={{
             position: 'fixed',
             top: `${dropdownPosition.top}px`,
-            right: `${dropdownPosition.right}px`,
+            left: `${dropdownPosition.left}px`,
           }}
           onMouseEnter={handleDropdownEnter}
           onMouseLeave={handleDropdownLeave}

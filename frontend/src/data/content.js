@@ -40,8 +40,7 @@ Ajit does not claim final answers. Instead, he offers structured experiments, re
 • Is meaning an illusion—or an emergent property of lived experimentation?
 
 At its core, Faith by Experiments is not about converting minds—it is about engaging them. Ajit believes that when faith is approached with the same seriousness as science—open to falsification, grounded in experience, and free from fear—it becomes not weaker, but profoundly stronger.`,
-    imageUrl:
-      "https://customer-assets.emergentagent.com/job_34e2cbef-ee34-45ac-8348-79293beec714/artifacts/w20t1x53_Production-%20Photo_Ajit%20Kumar.png",
+    imageUrl: "/Author_image.png",
   },
 
   positioningBridge: {
