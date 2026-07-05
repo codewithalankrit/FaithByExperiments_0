@@ -122,14 +122,23 @@ html {
 }
 
 /* Match Quill editor spacing on rendered post content */
-.prose p {
-  margin-bottom: 1.5em;
+.prose p,
+.prose-lg p,
+[data-testid="full-content"] p,
+[data-testid="preview-content"] p {
+  margin-bottom: 1.5em !important;
 }
 
-.prose p:last-child {
+.prose p:last-child,
+.prose-lg p:last-child,
+[data-testid="full-content"] p:last-child,
+[data-testid="preview-content"] p:last-child {
   margin-bottom: 0;
 }
 
-.prose p:empty {
+.prose p:empty,
+.prose-lg p:empty,
+[data-testid="full-content"] p:empty,
+[data-testid="preview-content"] p:empty {
   min-height: 1.5em;
 }

@@ -149,7 +149,7 @@ export const FlagshipContentDetailPage = ({
               <div className="space-y-8 md:space-y-12">
                 {showFullContent ? (
                   <div
-                    className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed prose prose-lg max-w-none"
+                    className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed max-w-none"
                     data-testid="full-content"
                     dangerouslySetInnerHTML={{ __html: sanitizeQuillHtmlForDisplay(content.fullContent) }}
                   />
@@ -157,7 +157,7 @@ export const FlagshipContentDetailPage = ({
                   <>
                     {/* Preview content - shown clearly */}
                     <div
-                      className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed prose prose-lg max-w-none"
+                      className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed max-w-none"
                       data-testid="preview-content"
                       dangerouslySetInnerHTML={{
                         __html: sanitizeQuillHtmlForDisplay(content.previewContent),
@@ -167,7 +167,7 @@ export const FlagshipContentDetailPage = ({
                     {/* Blurred remaining content section */}
                     <div className="relative">
                       <div
-                        className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed prose prose-lg max-w-none blur-sm select-none pointer-events-none"
+                        className="font-sans text-base md:text-lg text-warm-black/80 leading-relaxed max-w-none blur-sm select-none pointer-events-none"
                         style={{ minHeight: "400px" }}
                       >
                         <p className="text-warm-black/60">
