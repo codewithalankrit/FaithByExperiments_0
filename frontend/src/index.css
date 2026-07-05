@@ -120,3 +120,16 @@ html {
   max-width: 100% !important;
   box-sizing: border-box !important;
 }
+
+/* Match Quill editor spacing on rendered post content */
+.prose p {
+  margin-bottom: 1.5em;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+.prose p:empty {
+  min-height: 1.5em;
+}
