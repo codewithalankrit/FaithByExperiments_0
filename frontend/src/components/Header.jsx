@@ -8,9 +8,9 @@ export const Header = ({ isLoggedIn, isAdmin, onLogout }) => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
-  const [dropdownTimeout, setDropdownTimeout] = useState(null);
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const dropdownContainerRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   const handleScroll = (id) => {
     navigate('/');
@@ -33,11 +33,7 @@ export const Header = ({ isLoggedIn, isAdmin, onLogout }) => {
     setIsMobileMenuOpen(false);
   };
 
-  const handleDropdownEnter = () => {
-    if (dropdownTimeout) {
-      clearTimeout(dropdownTimeout);
-      setDropdownTimeout(null);
-    }
+  const handleDropdownToggle = () => {
     if (dropdownContainerRef.current) {
       const rect = dropdownContainerRef.current.getBoundingClientRect();
       setDropdownPosition({
@@ -45,23 +41,25 @@ export const Header = ({ isLoggedIn, isAdmin, onLogout }) => {
         left: rect.left
       });
     }
-    setIsAdminDropdownOpen(true);
-  };
-
-  const handleDropdownLeave = () => {
-    const timeout = setTimeout(() => {
-      setIsAdminDropdownOpen(false);
-    }, 400); // Increased delay to allow moving mouse to dropdown
-    setDropdownTimeout(timeout);
+    setIsAdminDropdownOpen(!isAdminDropdownOpen);
   };
 
   useEffect(() => {
-    return () => {
-      if (dropdownTimeout) {
-        clearTimeout(dropdownTimeout);
+    const handleClickOutside = (event) => {
+      if (dropdownContainerRef.current && !dropdownContainerRef.current.contains(event.target) &&
+          dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsAdminDropdownOpen(false);
       }
     };
-  }, [dropdownTimeout]);
+
+    if (isAdminDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isAdminDropdownOpen]);
 
   useEffect(() => {
     const updatePosition = () => {
@@ -111,14 +109,13 @@ export const Header = ({ isLoggedIn, isAdmin, onLogout }) => {
             <div 
               ref={dropdownContainerRef}
               className="admin-dropdown-container"
-              onMouseEnter={handleDropdownEnter}
-              onMouseLeave={handleDropdownLeave}
             >
               <button 
                 className="admin-icon-link" 
                 title="User Menu"
                 aria-label="User Menu"
                 aria-expanded={isAdminDropdownOpen}
+                onClick={handleDropdownToggle}
               >
                 <User size={20} />
               </button>
@@ -141,14 +138,13 @@ export const Header = ({ isLoggedIn, isAdmin, onLogout }) => {
       {/* Dropdown Menu Portal */}
       {isAdminDropdownOpen && createPortal(
         <div 
+          ref={dropdownRef}
           className="admin-dropdown-menu admin-dropdown-menu-portal"
           style={{
             position: 'fixed',
             top: `${dropdownPosition.top}px`,
             left: `${dropdownPosition.left}px`,
           }}
-          onMouseEnter={handleDropdownEnter}
-          onMouseLeave={handleDropdownLeave}
         >
           {isAdmin && (
             <Link 
