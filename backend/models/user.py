@@ -16,7 +16,7 @@ class UserCreate(BaseModel):
 
 
 class UserLogin(BaseModel):
-    email: EmailStr
+    name: str
     password: str
 
 
@@ -24,7 +24,7 @@ class UserInDB(BaseModel):
     model_config = ConfigDict(extra="ignore")
     
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    email: EmailStr
+    email: Optional[EmailStr] = None
     name: str
     password_hash: str
     is_admin: bool = False
@@ -41,7 +41,7 @@ class UserResponse(BaseModel):
     model_config = ConfigDict(extra="ignore")
     
     id: str
-    email: EmailStr
+    email: Optional[EmailStr] = None
     name: str
     is_admin: bool
     is_subscribed: bool

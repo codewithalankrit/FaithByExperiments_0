@@ -70,13 +70,14 @@ class TestPasswordResetFlow:
         """Test complete password reset flow: request -> validate -> confirm -> login"""
         # Create a unique test user
         unique_email = f"TEST_pwreset_{uuid.uuid4().hex[:8]}@example.com"
+        unique_name = f"Test User {uuid.uuid4().hex[:8]}"
         original_password = "original_password_123"
         new_password = "new_password_456"
         
         # Step 1: Create test user
         signup_response = requests.post(
             f"{BASE_URL}/api/auth/signup",
-            json={"email": unique_email, "name": "Test User", "password": original_password}
+            json={"email": unique_email, "name": unique_name, "password": original_password}
         )
         assert signup_response.status_code == 200
         
@@ -105,7 +106,7 @@ class TestPasswordResetFlow:
         # Step 5: Verify new password works
         login_response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": unique_email, "password": new_password}
+            json={"name": unique_name, "password": new_password}
         )
         assert login_response.status_code == 200
         assert "access_token" in login_response.json()
@@ -113,7 +114,7 @@ class TestPasswordResetFlow:
         # Step 6: Verify old password no longer works
         old_login_response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": unique_email, "password": original_password}
+            json={"name": unique_name, "password": original_password}
         )
         assert old_login_response.status_code == 401
     
@@ -130,9 +131,10 @@ class TestPasswordResetFlow:
         """Test that a reset token cannot be used twice"""
         # Create test user
         unique_email = f"TEST_pwreset_reuse_{uuid.uuid4().hex[:8]}@example.com"
+        unique_name = f"Test User {uuid.uuid4().hex[:8]}"
         signup_response = requests.post(
             f"{BASE_URL}/api/auth/signup",
-            json={"email": unique_email, "name": "Test User", "password": "password123"}
+            json={"email": unique_email, "name": unique_name, "password": "password123"}
         )
         assert signup_response.status_code == 200
         
@@ -201,7 +203,7 @@ class TestRazorpayPayments:
         # First login to get auth token
         login_response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": "admin@faithbyexperiments.com", "password": "admin123"}
+            json={"name": "Admin", "password": "admin123"}
         )
         assert login_response.status_code == 200
         token = login_response.json()["access_token"]
@@ -230,7 +232,7 @@ class TestRazorpayPayments:
         """Test verify payment returns error when Razorpay not configured"""
         login_response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": "admin@faithbyexperiments.com", "password": "admin123"}
+            json={"name": "Admin", "password": "admin123"}
         )
         token = login_response.json()["access_token"]
         
@@ -271,7 +273,7 @@ class TestExistingEndpoints:
         """Test login endpoint still works"""
         response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": "admin@faithbyexperiments.com", "password": "admin123"}
+            json={"name": "Admin", "password": "admin123"}
         )
         assert response.status_code == 200
         assert "access_token" in response.json()

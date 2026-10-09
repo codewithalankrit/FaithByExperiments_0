@@ -15,6 +15,7 @@ TEST_USER_PASSWORD = "test123"
 TEST_USER_NAME = "Test User"
 
 ADMIN_EMAIL = "admin@faithbyexperiments.com"
+ADMIN_NAME = "Admin"
 ADMIN_PASSWORD = "admin123"
 
 
@@ -43,7 +44,7 @@ def test_user_token(api_client):
 def admin_token(api_client):
     """Login as admin and return token"""
     response = api_client.post(f"{BASE_URL}/api/auth/login", json={
-        "email": ADMIN_EMAIL,
+        "name": ADMIN_NAME,
         "password": ADMIN_PASSWORD
     })
     if response.status_code == 200:
@@ -126,7 +127,7 @@ class TestUserLogin:
     def test_login_success(self, api_client, test_user_token):
         """Test successful login with valid credentials"""
         response = api_client.post(f"{BASE_URL}/api/auth/login", json={
-            "email": TEST_USER_EMAIL,
+            "name": TEST_USER_NAME,
             "password": TEST_USER_PASSWORD
         })
         
@@ -144,7 +145,7 @@ class TestUserLogin:
     def test_login_invalid_password(self, api_client):
         """Test login with wrong password fails"""
         response = api_client.post(f"{BASE_URL}/api/auth/login", json={
-            "email": ADMIN_EMAIL,
+            "name": ADMIN_NAME,
             "password": "wrongpassword"
         })
         
@@ -153,9 +154,9 @@ class TestUserLogin:
         assert "detail" in data
     
     def test_login_nonexistent_user(self, api_client):
-        """Test login with non-existent email fails"""
+        """Test login with non-existent name fails"""
         response = api_client.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "nonexistent@example.com",
+            "name": "Nonexistent User",
             "password": "anypassword"
         })
         
@@ -168,7 +169,7 @@ class TestAdminLogin:
     def test_admin_login_success(self, api_client):
         """Test admin login returns is_admin=true"""
         response = api_client.post(f"{BASE_URL}/api/auth/login", json={
-            "email": ADMIN_EMAIL,
+            "name": ADMIN_NAME,
             "password": ADMIN_PASSWORD
         })
         
@@ -185,7 +186,7 @@ class TestAdminLogin:
     def test_admin_is_subscribed(self, api_client):
         """Test admin user is subscribed"""
         response = api_client.post(f"{BASE_URL}/api/auth/login", json={
-            "email": ADMIN_EMAIL,
+            "name": ADMIN_NAME,
             "password": ADMIN_PASSWORD
         })
         

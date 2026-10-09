@@ -37,6 +37,28 @@ const authHeaders = () => {
 const DEFAULT_TIMEOUT_MS = 10000;
 const PAYMENT_TIMEOUT_MS = 60000;
 
+/** Turn FastAPI / API error payloads into a readable string. */
+export const formatApiErrorDetail = (detail) => {
+  if (detail == null || detail === '') return 'Request failed';
+  if (typeof detail === 'string') return detail;
+  if (Array.isArray(detail)) {
+    const parts = detail.map((item) => {
+      if (typeof item === 'string') return item;
+      if (item && typeof item === 'object' && item.msg) {
+        const loc = Array.isArray(item.loc)
+          ? item.loc.filter((part) => part !== 'body').join('.')
+          : '';
+        return loc ? `${loc}: ${item.msg}` : item.msg;
+      }
+      return null;
+    }).filter(Boolean);
+    return parts.length ? parts.join(' ') : 'Request failed';
+  }
+  if (typeof detail === 'object' && detail.msg) return detail.msg;
+  if (typeof detail === 'object' && detail.message) return detail.message;
+  return 'Request failed';
+};
+
 const apiRequest = async (endpoint, options = {}) => {
   if (!API_URL) {
     console.error('API_URL is undefined. REACT_APP_BACKEND_URL not loaded from .env file.');
@@ -71,7 +93,7 @@ const apiRequest = async (endpoint, options = {}) => {
     
     if (!response.ok) {
       const error = await response.json().catch(() => ({ detail: 'Request failed' }));
-      throw new Error(error.detail || 'Request failed');
+      throw new Error(formatApiErrorDetail(error.detail));
     }
     
     return response.json();
@@ -104,11 +126,11 @@ export const authAPI = {
     return data;
   },
 
-  login: async (email, password) => {
+  login: async (name, password) => {
     try {
       const data = await apiRequest('/auth/login', {
         method: 'POST',
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, password }),
       });
       console.log('Login API response:', data);
       setToken(data.access_token);
@@ -190,7 +212,7 @@ export const uploadImage = async (file) => {
   
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: 'Upload failed' }));
-    throw new Error(error.detail || 'Upload failed');
+    throw new Error(formatApiErrorDetail(error.detail));
   }
   
   const data = await response.json();

@@ -78,7 +78,7 @@ async def get_current_user(
     
     return UserResponse(
         id=user_doc["id"],
-        email=user_doc["email"],
+        email=user_doc.get("email"),
         name=user_doc["name"],
         is_admin=user_doc.get("is_admin", False),
         is_subscribed=user_doc.get("is_subscribed", False),
@@ -114,6 +114,14 @@ async def signup(user_data: UserCreate):
     """Register a new user."""
     db = get_db()
     
+    name = user_data.name.strip()
+    if not name:
+        raise HTTPException(status_code=400, detail="Name is required")
+
+    existing_name = await db.users.find_one({"name": name})
+    if existing_name:
+        raise HTTPException(status_code=400, detail="Name already registered")
+
     # Check if email already exists
     existing_user = await db.users.find_one({"email": user_data.email})
     if existing_user:
@@ -124,7 +132,7 @@ async def signup(user_data: UserCreate):
     
     user = UserInDB(
         email=user_data.email,
-        name=user_data.name,
+        name=name,
         password_hash=hash_password(user_data.password),
         is_admin=is_admin,
         is_subscribed=False
@@ -159,22 +167,25 @@ async def login(credentials: UserLogin):
     """Login user and return JWT token."""
     db = get_db()
     
-    user_doc = await db.users.find_one({"email": credentials.email}, {"_id": 0})
+    name = credentials.name.strip()
+    user_doc = await db.users.find_one({"name": name}, {"_id": 0})
     
     if not user_doc:
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise HTTPException(status_code=401, detail="Invalid name or password")
     
     if not verify_password(credentials.password, user_doc["password_hash"]):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise HTTPException(status_code=401, detail="Invalid name or password")
     
     # Create token
-    access_token = create_access_token(data={"sub": user_doc["id"], "email": user_doc["email"]})
+    access_token = create_access_token(
+        data={"sub": user_doc["id"], "email": user_doc.get("email")}
+    )
     
     return TokenResponse(
         access_token=access_token,
         user=UserResponse(
             id=user_doc["id"],
-            email=user_doc["email"],
+            email=user_doc.get("email"),
             name=user_doc["name"],
             is_admin=user_doc.get("is_admin", False),
             is_subscribed=user_doc.get("is_subscribed", False),

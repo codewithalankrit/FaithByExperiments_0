@@ -51,10 +51,14 @@ export const SubscribePage = ({ onLogin }) => {
     setError("");
     setLoading(true);
 
+    const email = formData.email.trim();
+    const mobile = formData.mobile.trim();
+    const name = formData.name.trim();
+
     try {
       if (isLogin) {
         // Login
-        const data = await authAPI.login(formData.email, formData.password);
+        const data = await authAPI.login(name, formData.password);
 
         console.log("Login successful:", data);
 
@@ -79,10 +83,10 @@ export const SubscribePage = ({ onLogin }) => {
           // Step 1: Create pending signup order (includes user data)
           const orderData = await paymentsAPI.createPendingSignupOrder(
             selectedPlan,
-            formData.name,
-            formData.email,
+            name,
+            email || null,
             formData.password,
-            formData.mobile || null,
+            mobile || null,
           );
 
           // Step 2: Get payment config
@@ -147,15 +151,15 @@ export const SubscribePage = ({ onLogin }) => {
               } catch (err) {
                 setError(
                   err.message ||
-                    "Payment verification failed. If money was deducted, wait a minute and try signing in with your email and password.",
+                    "Payment verification failed. If money was deducted, wait a minute and try signing in with your name and password.",
                 );
                 setLoading(false);
               }
             },
             prefill: {
               name: formData.name,
-              email: formData.email,
-              contact: formData.mobile || undefined,
+              email: email || undefined,
+              contact: mobile || undefined,
             },
             theme: {
               color: "#4A5568",
@@ -356,7 +360,7 @@ export const SubscribePage = ({ onLogin }) => {
                       htmlFor="email"
                       className="block font-sans font-medium text-base text-warm-black"
                     >
-                      Email Address
+                      Email Address (Optional)
                     </label>
                     <input
                       type="email"
@@ -364,7 +368,6 @@ export const SubscribePage = ({ onLogin }) => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      required
                       className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
                       placeholder="your@email.com"
                       data-testid="signup-email-input"
@@ -474,21 +477,21 @@ export const SubscribePage = ({ onLogin }) => {
                 >
                   <div className="space-y-2">
                     <label
-                      htmlFor="email"
+                      htmlFor="login-name"
                       className="block font-sans font-medium text-base text-warm-black"
                     >
-                      Email Address
+                      Full Name
                     </label>
                     <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
+                      type="text"
+                      id="login-name"
+                      name="name"
+                      value={formData.name}
                       onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-black/20 rounded font-sans text-base text-warm-black bg-white focus:outline-none focus:border-accent-muted focus:ring-1 focus:ring-accent-muted"
-                      placeholder="your@email.com"
-                      data-testid="login-email-input"
+                      placeholder="Enter your full name"
+                      data-testid="login-name-input"
                     />
                   </div>
 

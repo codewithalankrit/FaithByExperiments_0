@@ -221,6 +221,7 @@ async def startup_event():
     """Initialize database indexes on startup."""
     # Create indexes
     await db.users.create_index("email", unique=True)
+    await db.users.create_index("name", unique=True)
     await db.users.create_index("id", unique=True)
     await db.posts.create_index("id", unique=True)
     await db.posts.create_index("slug", unique=True)

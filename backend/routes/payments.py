@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Header, BackgroundTasks, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, field_validator
 from typing import Optional
 from datetime import datetime, timezone, timedelta
 import json
@@ -141,14 +141,19 @@ async def fulfill_paid_order(
         from models.user import UserInDB
 
         pending_data = order["pending_user_data"]
-        existing_user = await db.users.find_one({"email": pending_data["email"]}, {"_id": 0})
+        pending_email = pending_data.get("email")
+        existing_user = None
+        if pending_email:
+            existing_user = await db.users.find_one({"email": pending_email}, {"_id": 0})
 
         if existing_user:
             user_id = existing_user["id"]
             await db.users.update_one({"id": user_id}, {"$set": subscription_update})
             user_doc = await db.users.find_one({"id": user_id}, {"_id": 0})
         else:
-            is_admin = pending_data["email"].lower() == ADMIN_EMAIL.lower()
+            is_admin = bool(
+                pending_email and pending_email.lower() == ADMIN_EMAIL.lower()
+            )
             user_id = str(uuid.uuid4())
             subscription_started_at = datetime.fromisoformat(
                 subscription_update["subscription_started_at"].replace("Z", "+00:00")
@@ -157,7 +162,7 @@ async def fulfill_paid_order(
 
             user = UserInDB(
                 id=user_id,
-                email=pending_data["email"],
+                email=pending_email,
                 name=pending_data["name"],
                 password_hash=pending_data["password_hash"],
                 is_admin=is_admin,
@@ -246,7 +251,7 @@ async def _build_verify_response(
         )
 
     access_token = create_access_token(
-        data={"sub": user_id, "email": user_doc["email"]}
+        data={"sub": user_id, "email": user_doc.get("email")}
     )
     return {
         "success": True,
@@ -255,7 +260,7 @@ async def _build_verify_response(
         "access_token": access_token,
         "user": UserResponse(
             id=user_id,
-            email=user_doc["email"],
+            email=user_doc.get("email"),
             name=user_doc["name"],
             is_admin=user_doc.get("is_admin", False),
             is_subscribed=user_doc.get("is_subscribed", False),
@@ -272,10 +277,25 @@ class CreateOrderRequest(BaseModel):
 class CreatePendingSignupOrderRequest(BaseModel):
     plan_id: str
     name: str
-    email: str
+    email: Optional[EmailStr] = None
     password: str
     mobile: Optional[str] = None
 
+    @field_validator("name", mode="before")
+    @classmethod
+    def strip_name(cls, value):
+        if isinstance(value, str):
+            return value.strip()
+        return value
+
+    @field_validator("email", "mobile", mode="before")
+    @classmethod
+    def empty_contact_to_none(cls, value):
+        if value is None:
+            return None
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value.strip() if isinstance(value, str) else value
 
 class VerifyPaymentRequest(BaseModel):
     razorpay_order_id: str
@@ -371,9 +391,21 @@ async def create_pending_signup_order(request: CreatePendingSignupOrderRequest):
     plan = PLANS[request.plan_id]
     db = get_db()
 
-    existing_user = await db.users.find_one({"email": request.email})
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+    if not request.name:
+        raise HTTPException(status_code=400, detail="Name is required")
+
+    existing_name = await db.users.find_one({"name": request.name})
+    if existing_name:
+        raise HTTPException(status_code=400, detail="Name already registered")
+
+    if request.email:
+        existing_user = await db.users.find_one({"email": request.email})
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+    if request.mobile:
+        existing_mobile = await db.users.find_one({"mobile": request.mobile})
+        if existing_mobile:
+            raise HTTPException(status_code=400, detail="Mobile number already registered")
 
     try:
         pending_order_id = str(uuid.uuid4())
@@ -386,7 +418,7 @@ async def create_pending_signup_order(request: CreatePendingSignupOrderRequest):
             "notes": {
                 "pending_signup": True,
                 "name": request.name,
-                "email": request.email,
+                "email": request.email or "",
                 "plan_id": request.plan_id
             }
         }
