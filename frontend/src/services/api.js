@@ -1,9 +1,13 @@
 // API service for Faith by Experiments
 let API_URL = process.env.REACT_APP_BACKEND_URL;
 
-// If the site is served over HTTPS, ensure we never call an HTTP backend (mixed content).
-// This helps avoid production issues if REACT_APP_BACKEND_URL was mistakenly set to http://...
-if (typeof window !== 'undefined' && window.location?.protocol === 'https:' && API_URL?.startsWith('http://')) {
+// On HTTPS sites, upgrade http→https for remote backends only (never localhost — that breaks dev/prod misconfigs).
+if (
+  typeof window !== 'undefined' &&
+  window.location?.protocol === 'https:' &&
+  API_URL?.startsWith('http://') &&
+  !/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(API_URL)
+) {
   API_URL = API_URL.replace(/^http:\/\//, 'https://');
 }
 

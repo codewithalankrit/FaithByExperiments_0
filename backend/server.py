@@ -25,11 +25,16 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 # CORS middleware - MUST be added before routers
-origins = [
+_default_origins = [
     "https://faithbyexperiments.com",
     "https://www.faithbyexperiments.com",
-    "http://localhost:3000"
+    "http://localhost:3000",
 ]
+_cors_env = os.getenv("CORS_ORIGINS", "").strip()
+if _cors_env:
+    origins = [o.strip() for o in _cors_env.split(",") if o.strip()]
+else:
+    origins = _default_origins
 
 app.add_middleware(
     CORSMiddleware,
